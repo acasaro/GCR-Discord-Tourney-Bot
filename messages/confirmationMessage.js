@@ -16,13 +16,10 @@ module.exports = {
         time: 600_000,
       });
 
-      if (confirmationResponse.customId === "delete_tournament") {
+      if (confirmationResponse.customId === "confirm_delete_button") {
         // DELETE TOURNAMENT LOGIC HERE
-      } else if (confirmationResponse.customId === "cancel_button") {
-        await interaction.editReply({
-          content: `Delete was cancelled `,
-          components: [],
-        });
+      } else if (confirmationResponse.customId === "cancel_delete_button") {
+        await interaction.deleteReply();
       }
     } catch (error) {
       console.log(error);
@@ -39,13 +36,13 @@ module.exports = {
 // ----------------------------------------------------------------------
 
 const cancelButton = new ButtonBuilder()
-  .setCustomId("cancel_button")
+  .setCustomId("cancel_delete_button")
   .setEmoji("✖")
   .setLabel("Cancel")
   .setStyle(ButtonStyle.Danger);
 
 const confirmButton = new ButtonBuilder()
-  .setCustomId("confirm_button")
+  .setCustomId("confirm_delete_tournament")
   .setEmoji("✔️")
   .setLabel("Confirm")
   .setStyle(ButtonStyle.Success);

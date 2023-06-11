@@ -54,7 +54,7 @@ const deleteTournament = () => {
     .setStyle(ButtonStyle.Danger)
     .setEmoji("🗑️")
     .setLabel(`Delete`)
-    .setCustomId("confirm_delete");
+    .setCustomId("confirm_delete_message");
 };
 
 const editDetails = () => {
