@@ -33,22 +33,21 @@ module.exports = {
       });
 
       if (confirmation.customId === "create_tourney") {
-        await confirmation.update({
-          content: `Creating tournament...`,
-          components: [],
-          embeds: [],
-          ephemeral: true,
-        });
-
-        await creatTournamentChannels(interaction.client).then(
-          async (response) =>
-            await interaction.editReply({
-              content: `I've successfully created: **New Tournament**\nTo customize further and open registration, head to: <#${response.id}>`,
-              components: [],
-              embeds: [],
-              ephemeral: true,
-            })
-        );
+        // await confirmation.update({
+        //   content: `Creating tournament...`,
+        //   components: [],
+        //   embeds: [],
+        //   ephemeral: true,
+        // });
+        // await creatTournamentChannels(interaction.client).then(
+        //   async (response) =>
+        //     await interaction.editReply({
+        //       content: `I've successfully created: **New Tournament**\nTo customize further and open registration, head to: <#${response.id}>`,
+        //       components: [],
+        //       embeds: [],
+        //       ephemeral: true,
+        //     })
+        // );
       } else if (confirmation.customId === "delete_tournament") {
       } else if (confirmation.customId === "cancel_tournament") {
         await interaction.deleteReply();

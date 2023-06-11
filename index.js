@@ -1,6 +1,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
-const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
+const { Client, Collection, GatewayIntentBits } = require("discord.js");
 const { config } = require("./config");
 const { token } = config;
 
@@ -14,6 +14,7 @@ bot.buttonCommands = new Collection();
 
 /**********************************************************************/
 // Registration of Slash-Command Interactions.
+
 const foldersPath = path.join(__dirname, "commands");
 const commandFolders = fs.readdirSync(foldersPath).filter((folder) => folder !== ".DS_Store");
 

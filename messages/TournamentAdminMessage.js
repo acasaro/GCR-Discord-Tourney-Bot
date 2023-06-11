@@ -1,19 +1,19 @@
-const { ButtonBuilder, ButtonStyle } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { adminEmbed } = require("../embeds/adminEmbed");
 
-const cancel = () =>
-  new ButtonBuilder()
-    .setCustomId("cancel_tournament")
-    .setEmoji("❌")
-    .setLabel("Cancel")
-    .setStyle(ButtonStyle.Secondary);
-
-const create = () => {
-  return new ButtonBuilder()
-    .setStyle(ButtonStyle.Success)
-    .setEmoji("🏆")
-    .setLabel(`Create`)
-    .setCustomId("create_tourney");
+module.exports = {
+  async execute(channel) {
+    await channel.send({
+      embeds: [adminEmbed],
+      components: [row1, row2],
+      ephemeral: false,
+    });
+    return;
+  },
 };
+
+// Components
+// ----------------------------------------------------------------------
 
 const start = (isDisabled) => {
   return new ButtonBuilder()
@@ -65,13 +65,10 @@ const editDetails = () => {
     .setCustomId("edit_details");
 };
 
-module.exports = {
-  start,
-  cancel,
-  publish,
-  unpublish,
-  startCheckin,
-  deleteTournament,
-  editDetails,
-  create,
-};
+const row1 = new ActionRowBuilder().addComponents(
+  start(),
+  startCheckin(true),
+  publish(),
+  unpublish(true)
+);
+const row2 = new ActionRowBuilder().addComponents(editDetails(), deleteTournament());

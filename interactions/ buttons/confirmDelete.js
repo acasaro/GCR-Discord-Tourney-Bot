@@ -1,5 +1,5 @@
 module.exports = {
-  id: "delete_tournament",
+  id: "confirm_delete",
   async execute(interaction) {
     await require("../../messages/confirmationMessage").execute(interaction);
 
