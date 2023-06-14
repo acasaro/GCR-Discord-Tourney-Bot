@@ -12,7 +12,7 @@ module.exports = {
   },
 };
 
-// Components
+// Message Components
 // ----------------------------------------------------------------------
 
 const start = (isDisabled) => {
