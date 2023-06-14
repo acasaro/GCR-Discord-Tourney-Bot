@@ -20,7 +20,7 @@ npm start
 
 ## Deploy
 
-Deploys changes to Discord server. Working on way to make this reload automatically. Almost every change requires to stop and restart server locally.
+Deletes and re-deploys slash commands. Sometimes required but don't use for basic changes. Simply just stop and restart server locally to refresh bot on test Discord.
 
 ```sh
 npm start
