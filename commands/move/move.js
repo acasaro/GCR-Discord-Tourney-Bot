@@ -1,3 +1,9 @@
+/**
+ * @file Move
+ * @implements Discord Slash Cmd
+ * @description Moves tournament entry portal
+ */
+
 const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
