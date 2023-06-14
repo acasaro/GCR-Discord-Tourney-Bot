@@ -18,4 +18,12 @@ Runs the bot locally. This technically puts the bot online connected to the GCR 
 npm start
 ```
 
+## Deploy
+
+Deploys changes to Discord server. Working on way to make this reload automatically. Almost every change requires to stop and restart server locally.
+
+```sh
+npm start
+```
+
 Project file structure is based off [Discord Bot Template](https://github.com/NamVr/DiscordBot-Template)
