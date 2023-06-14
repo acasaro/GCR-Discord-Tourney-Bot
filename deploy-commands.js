@@ -7,7 +7,7 @@ const { clientId, guildId, token } = config;
 const commands = [];
 // Grab all the command files from the commands directory you created earlier
 const foldersPath = path.join(__dirname, "commands");
-const commandFolders = fs.readdirSync(foldersPath);
+const commandFolders = fs.readdirSync(foldersPath).filter((folder) => folder !== ".DS_Store");
 
 for (const folder of commandFolders) {
   if (folder !== "ignore") {

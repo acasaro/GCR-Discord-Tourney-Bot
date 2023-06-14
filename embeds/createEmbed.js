@@ -16,7 +16,7 @@ const createEmbed = new EmbedBuilder()
     { name: "\u200B", value: "\u200B" },
     {
       name: "**BUTTONS**",
-      value: `🏆 Creates category and channels for tourney\n ✏️ Edits tournament details\n 📣 Post tourney and entry portal to <#${channels.tourney_bot_test.toString()}> - </move:${commands.reload.toString()}> \n ⛔ Un-posts tourney and entry portal \n ❌ Cancels tournament setup `,
+      value: `🏆 Creates category and channels for tourney\n ✏️ Edits tournament details\n 📣 Post tourney and entry portal to <#${channels.tourney_bot_test}> - </move:${commands.move}> \n ⛔ Un-posts tourney and entry portal \n ❌ Cancels tournament setup `,
     }
   );
 

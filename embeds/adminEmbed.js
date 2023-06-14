@@ -17,7 +17,7 @@ const adminEmbed = new EmbedBuilder()
     { name: "\u200B", value: "\u200B" },
     {
       name: "**BUTTONS**",
-      value: `🏁 Starts the tournament \n ✅ Starts the check in feature 📣 Posts tourney to <#${channels.tourney_bot_test}> - </move:${commands.reload}> \n ⛔ Un-publish: Un-publishes the entry portal \n ✏️ Edits tournament details \n 🗑️ Deletes the tournament `,
+      value: `🏁 Starts the tournament \n ✅ Starts the check in feature\n 📣 Posts tourney to <#${channels.tourney_bot_test}> - </move:${commands.move}> \n ⛔ Un-publish: Un-publishes the entry portal \n ✏️ Edits tournament details \n 🗑️ Deletes the tournament `,
     }
   );
 
