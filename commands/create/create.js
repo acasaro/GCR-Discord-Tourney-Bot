@@ -1,19 +1,10 @@
-const Discord = require("discord.js");
-const { SlashCommandBuilder, ActionRowBuilder, PermissionsBitField, ChannelType } = Discord;
-const { createEmbed } = require("../../embeds/createEmbed");
-const { adminEmbed } = require("../../embeds/adminEmbed");
+/**
+ * @file Create
+ * @type Slash Cmd
+ * @description Creates initial setup for new tournament
+ */
 
-const {
-  start,
-  cancel,
-  publish,
-  unpublish,
-  startCheckin,
-  deleteTournament,
-  editDetails,
-  create,
-} = require("./createComponents");
-const { config } = require("../../config");
+const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
   name: "create",
@@ -21,8 +12,7 @@ module.exports = {
   guildOnly: true,
   data: new SlashCommandBuilder().setName("create").setDescription("Create a tournament"),
   async execute(interaction) {
-    const tourneyPrompt = await CreateControlsMessage({ isEphemeral: true });
-    const response = await interaction.reply(tourneyPrompt);
+    const response = await require("../../messages/createTourneyMessage").execute(interaction);
 
     const collectorFilter = (i) => i.user.id === interaction.user.id;
 
@@ -47,22 +37,3 @@ module.exports = {
     }
   },
 };
-
-// Extended Functionality
-// ----------------------------------------------------------------------
-
-async function CreateControlsMessage({ isEphemeral = false }) {
-  const row = new ActionRowBuilder().addComponents(
-    create(),
-    editDetails(),
-    publish(),
-    unpublish(true),
-    cancel()
-  );
-
-  return {
-    embeds: [createEmbed],
-    components: [row],
-    ephemeral: isEphemeral,
-  };
-}
