@@ -22,3 +22,6 @@ undo specific migration:
 
 ### Test Run 
 You can run `npx sequelize db:migrate` (with no migrations) to test out and see a database file generate.
+
+If migrations/models are available, but no database is currently within `/backend/db`, you can go ahead and run the above command to generate a database file. 
+
