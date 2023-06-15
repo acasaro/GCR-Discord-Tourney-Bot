@@ -6,15 +6,24 @@ const { token } = config;
 
 const bot = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-/**********************************************************************/
-// Define Collection of Commands, Slash Commands and cooldowns
-
+// Collection of Commands, Slash Commands and cooldowns
+// ----------------------------------------------------------------------
 bot.commands = new Collection();
 bot.buttonCommands = new Collection();
 
-/**********************************************************************/
-// Registration of Slash-Command Interactions.
+// Sqlize DB Connection
+// ----------------------------------------------------------------------
+const Sequelize = require("sequelize");
+const sequelize = new Sequelize("database", "user", "password", {
+  host: "localhost",
+  dialect: "sqlite",
+  logging: false,
+  // SQLite only
+  storage: "database.sqlite",
+});
 
+// Registration of Slash-Command Interactions
+// ----------------------------------------------------------------------
 const foldersPath = path.join(__dirname, "commands");
 const commandFolders = fs.readdirSync(foldersPath).filter((folder) => folder !== ".DS_Store");
 
@@ -34,9 +43,8 @@ for (const folder of commandFolders) {
   }
 }
 
-/**********************************************************************/
-// Below we will be making an event handler!
-
+// Initialize Event Handler
+// ----------------------------------------------------------------------
 const eventsPath = path.join(__dirname, "events");
 const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith(".js"));
 
@@ -50,9 +58,8 @@ for (const file of eventFiles) {
   }
 }
 
-/**********************************************************************/
-// Registration of Button-Command Interactions.
-
+// Register Button-Command Interactions
+// ----------------------------------------------------------------------
 const interactionsPath = path.join(__dirname, "interactions");
 const interactionFolders = fs.readdirSync(interactionsPath);
 
