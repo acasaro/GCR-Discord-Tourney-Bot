@@ -1,4 +1,5 @@
 require("dotenv").config({ path: "../.env" });
+const path = require("path");
 
 // configurations for db
 module.exports = {
@@ -7,7 +8,7 @@ module.exports = {
     password: "root",
     database: "database_development",
     host: "127.0.0.1",
-    storage: "./backend/database.sqlite",
+    storage: path.resolve(__dirname, "../database.sqlite"),
     dialect: "sqlite",
     seederStorage: "sequelize",
     benchmark: true,

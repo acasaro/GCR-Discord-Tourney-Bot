@@ -6,6 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node -r dotenv/config index.js",
+    "migrate": "cd backend && npx sequelize-cli db:migrate && cd ../",
+    "seed": "cd backend && npx npx sequelize-cli db:seed:all && cd ../",
     "deploy": "node -r dotenv/config deploy-commands.js"
   },
   "keywords": [
