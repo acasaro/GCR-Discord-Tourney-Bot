@@ -1,5 +1,7 @@
 Run all commands from within `/backend`
 
+To test creation of database with existing migrations skip to "Run Tests" below
+
 ### Initializing sequelize environment
 `npx sequelize init` 
 
@@ -20,8 +22,17 @@ undo most recent migration:
 undo specific migration: 
 - `npx sequelize db:migrate:undo --name <name of migration`
 
-### Test Run 
-You can run `npx sequelize db:migrate` (with no migrations) to test out and see a database file generate.
+undo all migrations: 
+- `npx sequelize db:migrate:undo:all`
 
-If migrations/models are available, but no database is currently within `/backend/db`, you can go ahead and run the above command to generate a database file. 
+### Run Tests 
+If migrations/models are available but no database is currently within `DB_FILE` path, you can go ahead and run `npx sequelize db:migrate`
+
+### If DB exists:
+`/db-utils/index.js`, `/tester`, and `test-create-query.js` are simple `INSERT/SELECT` examples that can be tested.
+
+Once done you can delete the `DB_FILE` directory.
+
+
+
 

@@ -16,6 +16,8 @@ const config = {
   // owners: [""],
 };
 //use env
+// included path to db as env. var.
+config.DB_FILE = process.env.DB_FILE
 config.token = process.env.TOKEN;
 config.clientId = process.env.CLIENT_ID;
 config.guildId = process.env.GUILD_ID;
