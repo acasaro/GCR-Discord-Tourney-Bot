@@ -1,11 +1,11 @@
-const {config} = require('../config');
 const {tournamentRankedRoles} = require('./constants/discord');
 
 /**
  *
+ *
  * @name getUserRankedRole
- * @param {*} message
- * @returns Output: [{ id: 1, name: 'Champion' }, { id: 3, name: 'Gold' }]
+ * @param {*} interaction
+ * @returns Output: { id: 1, name: 'Champion' }
  *
  */
 async function getUserRankedRole(interaction) {

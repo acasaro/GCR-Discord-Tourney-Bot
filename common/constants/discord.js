@@ -9,7 +9,6 @@ const channels = {
 
 // NOTE: This eventually needs to be dynamic and stored to
 // database using a slash command.
-
 const tournamentRankedRoles = {
   1116124871068491826: 'Platinum',
   1116124795105447946: 'Diamond',
