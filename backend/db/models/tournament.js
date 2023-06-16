@@ -16,7 +16,9 @@ module.exports = (sequelize, DataTypes) => {
   Tournament.init({
     title: DataTypes.STRING,
     description: DataTypes.STRING,
-    start_date: DataTypes.STRING
+    organizer_id: DataTypes.STRING,
+    startDate: DataTypes.DATE,
+    publish_location_id: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Tournament',

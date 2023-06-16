@@ -3,6 +3,7 @@ const path = require("node:path");
 const { Client, Collection, GatewayIntentBits } = require("discord.js");
 const { config } = require("./config");
 const { token } = config;
+const { DataTypes } = require("sequelize");
 
 const bot = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -10,17 +11,6 @@ const bot = new Client({ intents: [GatewayIntentBits.Guilds] });
 // ----------------------------------------------------------------------
 bot.commands = new Collection();
 bot.buttonCommands = new Collection();
-
-// Sqlize DB Connection
-// ----------------------------------------------------------------------
-const Sequelize = require("sequelize");
-const sequelize = new Sequelize("database", "user", "password", {
-  host: "localhost",
-  dialect: "sqlite",
-  logging: false,
-  // SQLite only
-  storage: "database.sqlite",
-});
 
 // Registration of Slash-Command Interactions
 // ----------------------------------------------------------------------

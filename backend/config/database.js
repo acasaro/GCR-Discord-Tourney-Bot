@@ -1,15 +1,18 @@
-require("dotenv").config({ path: "../.env" })
+require("dotenv").config({ path: "../.env" });
 
-// configurations for db 
+// configurations for db
 module.exports = {
   development: {
-    storage: process.env.DB_FILE,
+    username: "root",
+    password: "root",
+    database: "database_development",
+    host: "127.0.0.1",
+    storage: "./backend/database.sqlite",
     dialect: "sqlite",
     seederStorage: "sequelize",
     benchmark: true,
     logQueryParameters: true,
     typeValidation: true,
-    // logging: false
+    logging: true,
   },
 };
-

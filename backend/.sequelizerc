@@ -1,10 +1,10 @@
-const path = require("path")
+const path = require("path");
 
-// migrations, seeds, and models resolve to /backend/db/ 
+// migrations, seeds, and models resolve to /backend/db/
 
 module.exports = {
-    config: path.resolve("config", "database.js"),
-    "models-path": path.resolve("db", "models"),
-    "seeders-path": path.resolve("db", "seeders"),
-    "migrations-path": path.resolve("db", "migrations")
-}
+  config: path.resolve("config", "database.js"),
+  "models-path": path.resolve("db", "models"),
+  "seeders-path": path.resolve("db", "seeders"),
+  "migrations-path": path.resolve("db", "migrations"),
+};
