@@ -1,17 +1,16 @@
-const {tournamentRankedRoles} = require('./constants/discord');
+const { tournamentRankedRoles } = require('./constants/discord');
 
 /**
  *
  *
  * @name getUserRankedRole
- * @param {*} interaction
+ * @param {*} member
  * @returns Output: { id: 1, name: 'Champion' }
  *
  */
-async function getUserRankedRole(interaction) {
+async function getUserRankedRole(member) {
   try {
-    const user = interaction.member;
-    const userRoles = user.roles.cache.map(role => ({
+    const userRoles = member.roles.cache.map(role => ({
       id: role.id,
       name: role.name,
     }));
