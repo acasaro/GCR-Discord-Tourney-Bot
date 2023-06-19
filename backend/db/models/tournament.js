@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Tournament extends Model {
     /**
@@ -13,19 +11,23 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Tournament.init({
-    title: DataTypes.STRING,
-    description: DataTypes.STRING,
-    organizer_id: DataTypes.INTEGER,
-    startDate: DataTypes.DATE,
-    publish_location_id: DataTypes.INTEGER,
-    admin_channel_id: DataTypes.INTEGER,
-    parent_channel_id: DataTypes.INTEGER,
-    game_mode: DataTypes.STRING,
-    status: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Tournament',
-  });
+  Tournament.init(
+    {
+      title: DataTypes.STRING,
+      description: DataTypes.STRING,
+      organizer_id: DataTypes.INTEGER,
+      startDate: DataTypes.DATE,
+      publish_channel_id: DataTypes.STRING,
+      admin_channel_id: DataTypes.STRING,
+      parent_channel_id: DataTypes.STRING,
+      game_mode: DataTypes.STRING,
+      status: DataTypes.STRING,
+      lobby_channel_id: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: 'Tournament',
+    },
+  );
   return Tournament;
 };

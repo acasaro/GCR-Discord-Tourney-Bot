@@ -4,7 +4,14 @@
  * @description Creates initial setup for new tournament
  */
 
-const { SlashCommandBuilder } = require('discord.js');
+const {
+  SlashCommandBuilder,
+  ChannelType,
+  PermissionsBitField,
+} = require('discord.js');
+const { config } = require('../../config');
+const db = require('../../backend/db/models');
+const { Tournament } = db;
 
 module.exports = {
   name: 'create',
@@ -13,30 +20,81 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('create')
     .setDescription('Create a tournament'),
+
   async execute(interaction) {
-    const response =
-      await require('../../messages/createTourneyMessage').execute(interaction);
+    await interaction.reply({
+      content: `Creating tournament...`,
+      components: [],
+      embeds: [],
+      ephemeral: true,
+    });
 
-    const collectorFilter = i => i.user.id === interaction.user.id;
-
-    try {
-      const confirmation = await response.awaitMessageComponent({
-        filter: collectorFilter,
-        time: 600_000,
+    await creatTournamentChannels(interaction.client).then(async response => {
+      console.log(interaction.member);
+      const tournament = await Tournament.create({
+        title: 'New Tournament',
+        description: null,
+        game_mode: '2v2',
+        organizer_id: interaction.member.user.id.toString(),
+        admin_channel_id: response.newAdminChannel.id.toString(),
+        parent_channel_id: response.newAdminChannel.parentId.toString(),
+        startDate: null,
+        publish_location_id: null,
+        lobby_channel_id: response.lobbyChannel.id.toString(),
+        status: 'draft',
       });
+      await require('../../messages/TournamentAdminMessage').execute(
+        tournament.id,
+        response.newAdminChannel,
+      );
 
-      if (confirmation.customId === 'create_tourney') {
-      } else if (confirmation.customId === 'delete_tournament') {
-      } else if (confirmation.customId === 'cancel_tournament') {
-        await interaction.deleteReply();
-      }
-    } catch (error) {
-      console.log(error);
       await interaction.editReply({
-        content: `Something is wrong. Please try again.\nError catch: \n\`\`\` ${error}\n\`\`\``,
+        content: `I've successfully created: **New Tournament**\nTo customize further and open registration, head to: <#${response.newAdminChannel?.id}>`,
         components: [],
         embeds: [],
+        ephemeral: true,
       });
-    }
+    });
   },
 };
+
+async function creatTournamentChannels(client) {
+  const guild = await client.guilds.cache.get(config.guildId);
+
+  try {
+    const category = await guild.channels.create({
+      name: `New Tournament`,
+      type: ChannelType.GuildCategory,
+    });
+
+    const newAdminChannel = await guild.channels.create({
+      name: `Admin`,
+      type: ChannelType.GuildText,
+      parent: category.id,
+    });
+
+    const lobbyChannel = await guild.channels.create({
+      name: `Tournament Lobby`,
+      type: ChannelType.GuildVoice,
+      parent: category.id,
+      permissionOverwrites: [
+        {
+          id: config.guildId,
+          allow: [PermissionsBitField.Flags.ViewChannel],
+        },
+        {
+          id: config.guildId,
+          allow: [PermissionsBitField.Flags.Connect],
+        },
+        {
+          id: config.guildId,
+          allow: [PermissionsBitField.Flags.Speak],
+        },
+      ],
+    });
+
+    return { newAdminChannel, lobbyChannel };
+  } catch (error) {
+    console.log(error);
+  }
+}
