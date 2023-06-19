@@ -7,34 +7,46 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
       title: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       description: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       organizer_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER
       },
       startDate: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       },
       publish_location_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER
+      },
+      admin_channel_id: {
+        type: Sequelize.INTEGER
+      },
+      parent_channel_id: {
+        type: Sequelize.INTEGER
+      },
+      game_mode: {
+        type: Sequelize.STRING
+      },
+      status: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-      },
+        type: Sequelize.DATE
+      }
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Tournaments');
-  },
+  }
 };
