@@ -21,7 +21,22 @@ module.exports = {
       startDate: {
         type: Sequelize.DATE,
       },
-      publish_location_id: {
+      publish_channel_id: {
+        type: Sequelize.STRING,
+      },
+      admin_channel_id: {
+        type: Sequelize.STRING,
+      },
+      lobby_channel_id: {
+        type: Sequelize.STRING,
+      },
+      parent_channel_id: {
+        type: Sequelize.STRING,
+      },
+      game_mode: {
+        type: Sequelize.STRING,
+      },
+      status: {
         type: Sequelize.STRING,
       },
       createdAt: {
