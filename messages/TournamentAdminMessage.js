@@ -75,7 +75,7 @@ const editDetails = () => {
     .setStyle(ButtonStyle.Primary)
     .setEmoji('✏️')
     .setLabel(`Edit`)
-    .setCustomId('edit_details');
+    .setCustomId('show_edit_tournament');
 };
 
 const editGameMode = () => {
