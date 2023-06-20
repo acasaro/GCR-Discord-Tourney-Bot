@@ -60,10 +60,9 @@ for (const file of eventFiles) {
 const buttonCommands = fs.readdirSync('./interactions/buttons');
 
 for (const module of buttonCommands) {
-  const commandFile = path.join('./interactions/buttons', module);
   const command = require(`./interactions/buttons/${module}`);
   bot.buttonCommands.set(command.id, command);
-  console.log(commandFile);
+  console.log(`${command.id} Button command successfully loaded...`);
 }
 
 // Registration of Modal-Command Interactions.
@@ -71,10 +70,9 @@ for (const module of buttonCommands) {
 const modalCommands = fs.readdirSync('./interactions/modals');
 
 for (const module of modalCommands) {
-  const commandFile = path.join('./interactions/modals', module);
   const command = require(`./interactions/modals/${module}`);
   bot.modalCommands.set(command.id, command);
-  console.log(commandFile);
+  console.log(`${command.id} Modal command successfully loaded...`);
 }
 
 bot.login(token);

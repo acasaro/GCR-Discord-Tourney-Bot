@@ -23,6 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       game_mode: DataTypes.STRING,
       status: DataTypes.STRING,
       lobby_channel_id: DataTypes.STRING,
+      admin_message_id: DataTypes.STRING,
+      publish_message_id: DataTypes.STRING,
     },
     {
       sequelize,

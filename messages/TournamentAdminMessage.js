@@ -10,15 +10,26 @@ module.exports = {
         id: tournamentId,
       },
     });
-    console.log(tournament.dataValues);
     if (tournament === null) {
       console.log('Tournament Not found!');
     } else {
-      await discordChannel.send({
+      // Send initial admin embed to tournament admin channel
+      const sendAdminEmbed = await discordChannel.send({
         embeds: [adminEmbed(tournament.dataValues)],
         components: [row1, row2],
         ephemeral: false,
       });
+      if (!tournament.admin_message_id) {
+        // update db with admin message id to edit later
+        await Tournament.update(
+          { admin_message_id: sendAdminEmbed.id.toString() },
+          {
+            where: {
+              admin_message_id: null,
+            },
+          },
+        );
+      }
     }
 
     return;
