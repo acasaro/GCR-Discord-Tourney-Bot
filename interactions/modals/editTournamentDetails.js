@@ -1,42 +1,68 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { adminEmbed } = require('../embeds/adminEmbed');
-const db = require('../backend/db/models');
+/**
+ * @file editTournamentInfo
+ * @type Modal Interaction
+ * @description
+ */
+const db = require('../../backend/db/models');
+const { adminEmbed } = require('../../embeds/adminEmbed');
 const { Tournament } = db;
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
-  async execute(tournamentId, discordChannel) {
+  id: 'edit_tournament_modal',
+  async execute(interaction) {
+    if (!interaction.isModalSubmit()) return;
+
+    // Get modal input fields
+    const tournamentName =
+      interaction.fields.getTextInputValue('tournament_name');
+    const tournamentInfo =
+      interaction.fields.getTextInputValue('tournament_info');
+
+    // Get tournament from DB
     const tournament = await Tournament.findOne({
       where: {
-        id: tournamentId,
+        admin_channel_id: interaction.channelId,
       },
     });
-    if (tournament === null) {
-      console.log('Tournament Not found!');
-    } else {
-      // Send initial admin embed to tournament admin channel
-      const sendAdminEmbed = await discordChannel.send({
-        embeds: [adminEmbed(tournament.dataValues)],
-        components: [row1, row2],
-        ephemeral: false,
-      });
-      if (!tournament.admin_message_id) {
-        // update db with admin message id to edit later
-        await Tournament.update(
-          { admin_message_id: sendAdminEmbed.id.toString() },
-          {
-            where: {
-              admin_message_id: null,
-            },
-          },
-        );
-      }
-    }
 
+    // Merge tournament values with new modal values
+    const { admin_message_id } = tournament.dataValues;
+    const updatedTournamentValues = {
+      ...tournament.dataValues,
+      title: tournamentName,
+      description: tournamentInfo,
+    };
+
+    // Update tournament in DB
+    await Tournament.update(
+      { title: tournamentName, description: tournamentInfo },
+      {
+        where: {
+          id: tournament.id,
+        },
+      },
+    );
+
+    // Edit Admin message with updated values
+    const adminMessage = await interaction.channel.messages.fetch(
+      admin_message_id,
+    );
+
+    adminMessage.edit({
+      embeds: [adminEmbed(updatedTournamentValues)],
+      components: [row1, row2],
+      ephemeral: false,
+    });
+
+    await interaction.deferUpdate();
     return;
   },
 };
 
 // Message Components
+// NOTE: This is duplicated code and can be better organized to reference
+// admin message embed as a dynamic function with better values for config
 // ----------------------------------------------------------------------
 
 const start = isDisabled => {

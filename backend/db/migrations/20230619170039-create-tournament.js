@@ -36,6 +36,12 @@ module.exports = {
       game_mode: {
         type: Sequelize.STRING,
       },
+      admin_message_id: {
+        type: Sequelize.STRING,
+      },
+      publish_message_id: {
+        type: Sequelize.STRING,
+      },
       status: {
         type: Sequelize.STRING,
       },

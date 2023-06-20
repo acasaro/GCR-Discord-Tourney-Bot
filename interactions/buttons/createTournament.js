@@ -73,8 +73,6 @@ async function creatTournamentChannels(client) {
       ],
     });
 
-    // await newAdminChannel.send(await AdminControlsMessage({ isEphemeral: false }));
-
     return newAdminChannel;
   } catch (error) {
     console.log(error);

@@ -30,7 +30,6 @@ module.exports = {
     });
 
     await creatTournamentChannels(interaction.client).then(async response => {
-      console.log(interaction.member);
       const tournament = await Tournament.create({
         title: 'New Tournament',
         description: null,

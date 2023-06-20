@@ -13,7 +13,6 @@ const adminEmbed = tournamentVaulues => {
     game_mode,
     status,
   } = tournamentVaulues;
-  console.log('organizer ID:', organizer_id);
   return new EmbedBuilder()
     .setTitle(`GCR Tournament Configuration `)
     .setColor(0x00b9ff)
