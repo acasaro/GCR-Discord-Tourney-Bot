@@ -78,13 +78,30 @@ const editDetails = () => {
     .setCustomId('edit_details');
 };
 
+const editGameMode = () => {
+  return new ButtonBuilder()
+    .setStyle(ButtonStyle.Primary)
+    .setEmoji('🎮')
+    .setLabel(`Mode`)
+    .setCustomId('edit_game_mode');
+};
+const editStartDate = () => {
+  return new ButtonBuilder()
+    .setStyle(ButtonStyle.Primary)
+    .setEmoji('🗓')
+    .setLabel(`Date`)
+    .setCustomId('edit_start_date');
+};
+
 const row1 = new ActionRowBuilder().addComponents(
   start(),
+  editDetails(),
+  editGameMode(),
   startCheckin(true),
-  publish(),
-  unpublish(true),
 );
 const row2 = new ActionRowBuilder().addComponents(
-  editDetails(),
+  editStartDate(),
+  publish(),
+  unpublish(true),
   deleteTournament(),
 );
