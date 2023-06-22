@@ -95,7 +95,29 @@ async function deleteRegisteredTournamentUsers(tournamentId) {
   }
 }
 
+/**
+ ***************************************************
+ * @name updateTournament
+ * @param {*} tournamentId
+ * @param updatedValues { name: "Fancy Pants", ...}
+ * @returns Promise
+ ***************************************************
+ */
+async function updateTournament(tournamentId, updatedValues) {
+  try {
+    return await Tournament.update(updatedValues, {
+      where: {
+        id: tournamentId.id,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
 module.exports = {
+  updateTournament,
   deleteRegisteredTournamentUsers,
   registerTournamentUser,
   getUserRankedRole,

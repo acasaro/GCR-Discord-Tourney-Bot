@@ -1,4 +1,7 @@
-const { getTournamentByCategoryId } = require('../../common/utility-functions');
+const {
+  getTournamentByCategoryId,
+  updateTournament,
+} = require('../../common/utility-functions');
 const { CheckinEmbedMessage } = require('../../embeds/checkinEmbed');
 
 module.exports = {
@@ -28,6 +31,10 @@ module.exports = {
       );
 
       await checkinMessage.edit(CheckinEmbedMessage({ checkinActive: false }));
+
+      await updateTournament(tournament.id, {
+        checkin_message_id: checkinMessage.id.toString(),
+      });
 
       return await interaction.update({
         content: 'Check-in has ended',
