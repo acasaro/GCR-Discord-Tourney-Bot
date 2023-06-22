@@ -25,7 +25,7 @@ module.exports = {
           { admin_message_id: sendAdminEmbed.id.toString() },
           {
             where: {
-              admin_message_id: null,
+              id: tournamentId,
             },
           },
         );

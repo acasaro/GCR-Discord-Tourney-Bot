@@ -37,29 +37,3 @@ module.exports = {
     await interaction.showModal(modal);
   },
 };
-
-// Components
-// ----------------------------------------------------------------------
-
-const cancelButton = ({ disableButtons = false }) => {
-  return new ButtonBuilder()
-    .setCustomId('cancel_delete_tournament')
-    .setEmoji('✖')
-    .setLabel('Cancel')
-    .setStyle(disableButtons ? ButtonStyle.Secondary : ButtonStyle.Danger)
-    .setDisabled(disableButtons);
-};
-const confirmButton = ({ disableButtons = false }) => {
-  return new ButtonBuilder()
-    .setCustomId('delete_tournament')
-    .setEmoji('✔️')
-    .setLabel('Confirm')
-    .setStyle(disableButtons ? ButtonStyle.Secondary : ButtonStyle.Success)
-    .setDisabled(disableButtons);
-};
-const row = props => {
-  return new ActionRowBuilder().addComponents(
-    confirmButton({ ...props }),
-    cancelButton({ ...props }),
-  );
-};
