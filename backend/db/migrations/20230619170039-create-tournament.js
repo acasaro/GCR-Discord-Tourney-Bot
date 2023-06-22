@@ -30,6 +30,9 @@ module.exports = {
       lobby_channel_id: {
         type: Sequelize.STRING,
       },
+      checkin_message_id: {
+        type: Sequelize.STRING,
+      },
       parent_channel_id: {
         type: Sequelize.STRING,
       },

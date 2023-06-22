@@ -1,6 +1,7 @@
 const db = require('../../backend/db/models');
 const { Tournament } = db;
 const { ActionRowBuilder, ButtonStyle, ButtonBuilder } = require('discord.js');
+const { CheckinEmbedMessage } = require('../../embeds/checkinEmbed');
 
 module.exports = {
   id: 'start_tourney_checkin',
@@ -12,16 +13,29 @@ module.exports = {
           admin_channel_id: interaction.channelId,
         },
       });
-      const { lobby_channel_id } = tournament.dataValues;
 
       // Fetch tournament lobby channel
+      const { lobby_channel_id } = tournament.dataValues;
+
       const tournamentLobbyChannel =
         interaction.client.channels.cache.get(lobby_channel_id);
 
       // Send checkin message to chat inside tournament lobby.
-      await require('../../embeds/checkinEmbed').execute(
-        tournamentLobbyChannel,
+      const checkinMessage = await tournamentLobbyChannel.send(
+        CheckinEmbedMessage(),
       );
+
+      // If checkin_message_id doesn't exisit add it
+      if (!tournament.checkin_message_id) {
+        await Tournament.update(
+          { checkin_message_id: checkinMessage.id.toString() },
+          {
+            where: {
+              id: tournament.id,
+            },
+          },
+        );
+      }
 
       await interaction.reply({
         content: `Check-in has now started \n\nParticipants will click the "Check-in" button in #tournament-lobby channel to confirm they're here and ready to play! Those who do not will not be in the tournament when the Admin clicks the "End" button.`,
