@@ -8,7 +8,7 @@ module.exports = {
   id: 'end_checkin',
   async execute(interaction) {
     try {
-      const { member, channel } = interaction;
+      const { channel } = interaction;
       const parentChannelId = channel.parentId;
       const tournament = await getTournamentByCategoryId(parentChannelId);
       const { checkin_message_id, lobby_channel_id } = tournament;
