@@ -22,7 +22,7 @@ module.exports = {
 
       // Send checkin message to chat inside tournament lobby.
       const checkinMessage = await tournamentLobbyChannel.send(
-        CheckinEmbedMessage(),
+        CheckinEmbedMessage({ checkinActive: true }),
       );
 
       // If checkin_message_id doesn't exisit add it

@@ -1,14 +1,12 @@
 const { tournamentRankedRoles } = require('./constants/discord');
 const db = require('../backend/db/models');
 const { Tournament, Registration } = db;
-
 /**
- *
- *
+ ***************************************************
  * @name getUserRankedRole
  * @param {*} member
  * @returns Output: { id: 1, name: 'Champion' }
- *
+ ***************************************************
  */
 async function getUserRankedRole(member) {
   try {
@@ -30,14 +28,12 @@ async function getUserRankedRole(member) {
     return error;
   }
 }
-
 /**
- *
- *
+ ***************************************************
  * @name getTournamentByCategoryId
  * @param {*} categoryChannelId
  * @returns Tournament from db
- *
+ ***************************************************
  */
 async function getTournamentByCategoryId(categoryChannelId) {
   try {
@@ -53,17 +49,19 @@ async function getTournamentByCategoryId(categoryChannelId) {
   }
 }
 /**
- *
- *
+ ***************************************************
  * @name registerTournamentUser
  * @param {*} newRegistrationValues object
  * @returns Tournament from db
- *
+ ***************************************************
  */
 async function registerTournamentUser(newRegistrationValues) {
   try {
     const alreadyCheckedIn = await Registration.findOne({
-      where: { discord_id: newRegistrationValues.discord_id },
+      where: {
+        discord_id: newRegistrationValues.discord_id,
+        tournament_id: newRegistrationValues.tournament_id,
+      },
     });
     if (alreadyCheckedIn) {
       return `You're already checked-in to this tournament`;
@@ -77,7 +75,28 @@ async function registerTournamentUser(newRegistrationValues) {
   }
 }
 
+/**
+ ***************************************************
+ * @name deleteRegisteredTournamentUsers
+ * @param {*} tournamentId
+ * @returns Promise
+ ***************************************************
+ */
+async function deleteRegisteredTournamentUsers(tournamentId) {
+  try {
+    return await Registration.destroy({
+      where: {
+        tournament_id: tournamentId,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
 module.exports = {
+  deleteRegisteredTournamentUsers,
   registerTournamentUser,
   getUserRankedRole,
   getTournamentByCategoryId,
