@@ -1,11 +1,14 @@
-const { getTournamentByCategoryId } = require('../../common/utility-functions');
+const {
+  getTournamentByCategoryId,
+  updateTournament,
+} = require('../../common/utility-functions');
 const { CheckinEmbedMessage } = require('../../embeds/checkinEmbed');
 
 module.exports = {
   id: 'end_checkin',
   async execute(interaction) {
     try {
-      const { member, channel } = interaction;
+      const { channel } = interaction;
       const parentChannelId = channel.parentId;
       const tournament = await getTournamentByCategoryId(parentChannelId);
       const { checkin_message_id, lobby_channel_id } = tournament;
@@ -27,7 +30,13 @@ module.exports = {
         checkin_message_id,
       );
 
-      await checkinMessage.edit(CheckinEmbedMessage({ checkinActive: false }));
+      const updatedCheckinMessage = await checkinMessage.edit(
+        CheckinEmbedMessage({ checkinActive: false }),
+      );
+
+      await updateTournament(tournament.id, {
+        checkin_message_id: updatedCheckinMessage.id.toString(),
+      });
 
       return await interaction.update({
         content: 'Check-in has ended',

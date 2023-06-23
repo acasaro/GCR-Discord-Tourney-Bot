@@ -26,7 +26,7 @@ module.exports = {
       );
 
       // If checkin_message_id doesn't exisit add it
-      if (!tournament.checkin_message_id) {
+      if (tournament.checkin_message_id !== checkinMessage.id.toString()) {
         await Tournament.update(
           { checkin_message_id: checkinMessage.id.toString() },
           {

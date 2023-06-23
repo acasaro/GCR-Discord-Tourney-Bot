@@ -95,7 +95,69 @@ async function deleteRegisteredTournamentUsers(tournamentId) {
   }
 }
 
+/**
+ ***************************************************
+ * @name updateTournament
+ * @param {*} tournamentId
+ * @param updatedValues { name: "Fancy Pants", ...}
+ * @returns Promise
+ ***************************************************
+ */
+async function updateTournament(tournamentId, updatedValues) {
+  try {
+    return await Tournament.update(updatedValues, {
+      where: {
+        id: tournamentId.id,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
+ * @name getRegisteredUsers
+ * @param {*} tournamentId
+ * @returns Array registered users in a tournament
+ ***************************************************
+ */
+async function getRegisteredUsers(tournamentId) {
+  try {
+    const queryRegistration = await Registration.findAll({
+      where: {
+        tournament_id: tournamentId,
+      },
+    });
+
+    const response = queryRegistration.map(({ dataValues }) => {
+      const {
+        username,
+        tournament_id,
+        discord_id,
+        discord_rank_role_id,
+        discord_rank_role_name,
+      } = dataValues;
+
+      return {
+        username,
+        tournament_id,
+        discord_id,
+        discord_rank_role_id,
+        discord_rank_role_name,
+      };
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
 module.exports = {
+  getRegisteredUsers,
+  updateTournament,
   deleteRegisteredTournamentUsers,
   registerTournamentUser,
   getUserRankedRole,
