@@ -62,18 +62,28 @@ async function creatTournamentChannels(client) {
 
   try {
     const category = await guild.channels.create({
-      name: `New Tournament`,
+      name: `🏆 New Tournament`,
       type: ChannelType.GuildCategory,
     });
 
     const newAdminChannel = await guild.channels.create({
-      name: `Admin`,
+      name: `admin`,
       type: ChannelType.GuildText,
       parent: category.id,
+      permissionOverwrites: [
+        {
+          id: '1118501937768312912',
+          allow: [PermissionsBitField.Flags.ViewChannel],
+        },
+        {
+          id: config.guildId,
+          deny: [PermissionsBitField.Flags.ViewChannel],
+        },
+      ],
     });
 
     const lobbyChannel = await guild.channels.create({
-      name: `Tournament Lobby`,
+      name: `🕐 Tournament Lobby`,
       type: ChannelType.GuildVoice,
       parent: category.id,
       permissionOverwrites: [

@@ -30,10 +30,12 @@ module.exports = {
         checkin_message_id,
       );
 
-      await checkinMessage.edit(CheckinEmbedMessage({ checkinActive: false }));
+      const updatedCheckinMessage = await checkinMessage.edit(
+        CheckinEmbedMessage({ checkinActive: false }),
+      );
 
       await updateTournament(tournament.id, {
-        checkin_message_id: checkinMessage.id.toString(),
+        checkin_message_id: updatedCheckinMessage.id.toString(),
       });
 
       return await interaction.update({

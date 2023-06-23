@@ -31,7 +31,7 @@ const CheckinEmbedMessage = ({ checkinActive, ...props }) => {
   const row = new ActionRowBuilder().addComponents(checkinButton());
 
   return {
-    content: `@here`,
+    // content: ``,
     embeds: [checkinEmbed],
     components: [row],
   };
