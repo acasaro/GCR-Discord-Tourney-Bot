@@ -12,6 +12,7 @@ const bot = new Client({ intents: [GatewayIntentBits.Guilds] });
 bot.commands = new Collection();
 bot.buttonCommands = new Collection();
 bot.modalCommands = new Collection();
+bot.selectCommands = new Collection();
 
 // Registration of Slash-Command Interactions
 // ----------------------------------------------------------------------
@@ -73,6 +74,18 @@ for (const module of modalCommands) {
   const command = require(`./interactions/modals/${module}`);
   bot.modalCommands.set(command.id, command);
   console.log(`${command.id} Modal command successfully loaded...`);
+}
+
+// Registration of select-menus Interactions
+// ----------------------------------------------------------------------
+const selectMenus = fs.readdirSync('./interactions/select-menus');
+
+// Loop through all files and store select-menus in selectMenus collection.
+
+for (const module of selectMenus) {
+  const command = require(`./interactions/select-menus/${module}`);
+  bot.selectCommands.set(command.id, command);
+  console.log(`${command.id} Select menu successfully loaded...`);
 }
 
 bot.login(token);

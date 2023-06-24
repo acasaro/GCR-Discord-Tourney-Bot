@@ -30,10 +30,10 @@ module.exports = {
     try {
       await command.execute(interaction);
       return;
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
       await interaction.reply({
-        content: 'There was an issue while understanding this modal!',
+        content: `There was an issue while understanding this modal! \nError catch: \n\`\`\` ${error}\n\`\`\``,
         ephemeral: true,
       });
       return;

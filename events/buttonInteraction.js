@@ -1,5 +1,5 @@
-const { InteractionType, ComponentType } = require("discord-api-types/v10");
-const { Events } = require("discord.js");
+const { InteractionType, ComponentType } = require('discord-api-types/v10');
+const { Events } = require('discord.js');
 
 module.exports = {
   name: Events.InteractionCreate,
@@ -17,7 +17,7 @@ module.exports = {
     // You can modify the error message at ./messages/defaultButtonError.js file!
 
     if (!command) {
-      await require("../messages/defaultButtonError").execute(interaction);
+      await require('../messages/defaultButtonError').execute(interaction);
       return;
     }
 

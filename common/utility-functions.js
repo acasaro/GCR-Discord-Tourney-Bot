@@ -107,7 +107,7 @@ async function updateTournament(tournamentId, updatedValues) {
   try {
     return await Tournament.update(updatedValues, {
       where: {
-        id: tournamentId.id,
+        id: tournamentId,
       },
     });
   } catch (error) {
