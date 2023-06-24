@@ -1,0 +1,119 @@
+const { footer, logo } = require('../common/constants/embeds');
+const { commands, channels } = require('../common/constants/discord');
+const { EmbedBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+
+module.exports = {
+  async AdminEmbed(props) {
+    const { tournament } = props;
+    try {
+      const { title, description, organizer_id, startDate, game_mode } =
+        tournament;
+      const embed = new EmbedBuilder()
+        .setTitle(`GCR Tournament Configuration `)
+        .setColor(0x00b9ff)
+        .setDescription(`Organizer: <@${organizer_id}>`)
+        .setThumbnail(logo)
+        .setFooter(footer)
+        .addFields({
+          name: '\u200B',
+          value: `📝 Name: ${title} \n 📝 Details: ${description} \n 📝 Game Mode: ${game_mode} \n 📆 Start Date: ${startDate} \n `,
+        })
+        .addFields(
+          { name: '\u200B', value: '\u200B' },
+          {
+            name: '**BUTTONS**',
+            value: `🏁 Starts the tournament \n ✅ Starts the check in feature\n 📣 Posts tourney to <#${channels.tourney_bot_test}> - </move:${commands.move}> \n ⛔ Un-publish: Un-publishes the entry portal \n ✏️ Edits tournament details \n 🎮 Edits tournament game mode \n 🗑️ Deletes the tournament `,
+          },
+        );
+
+      const row1 = new ActionRowBuilder().addComponents(
+        start({ isDisabled: true }),
+        editDetails(),
+        editGameMode(),
+        startCheckin({ isDisabled: true }),
+      );
+      const row2 = new ActionRowBuilder().addComponents(
+        editStartDate(),
+        publish({ isDisabled: true }),
+        unpublish({ isDisabled: true }),
+        deleteTournament(),
+      );
+
+      return {
+        embeds: [embed],
+        components: [row1, row2],
+        ephemeral: false,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  },
+};
+
+const start = ({ isDisabled = false, ...props }) => {
+  return new ButtonBuilder()
+    .setStyle(ButtonStyle.Success)
+    .setEmoji('🏁')
+    .setLabel(`Start`)
+    .setCustomId('start_tourney')
+    .setDisabled(isDisabled || false);
+};
+
+const publish = ({ isDisabled = false, ...props }) => {
+  return new ButtonBuilder()
+    .setStyle(ButtonStyle.Primary)
+    .setEmoji('📣')
+    .setLabel(`Post`)
+    .setCustomId('post_tourney')
+    .setDisabled(isDisabled || false);
+};
+
+const unpublish = ({ isDisabled = false, ...props }) => {
+  return new ButtonBuilder()
+    .setStyle(ButtonStyle.Primary)
+    .setEmoji('⛔')
+    .setLabel(`Unpost`)
+    .setCustomId('unpost_tourney')
+    .setDisabled(isDisabled || false);
+};
+
+const startCheckin = () => {
+  return new ButtonBuilder()
+    .setStyle(ButtonStyle.Primary)
+    .setEmoji('✅')
+    .setLabel(`Checkin`)
+    .setCustomId('start_tourney_checkin');
+};
+
+const deleteTournament = () => {
+  return new ButtonBuilder()
+    .setStyle(ButtonStyle.Danger)
+    .setEmoji('🗑️')
+    .setLabel(`Delete`)
+    .setCustomId('confirm_message');
+};
+
+const editDetails = () => {
+  return new ButtonBuilder()
+    .setStyle(ButtonStyle.Primary)
+    .setEmoji('✏️')
+    .setLabel(`Edit`)
+    .setCustomId('show_edit_tournament');
+};
+
+const editGameMode = () => {
+  return new ButtonBuilder()
+    .setStyle(ButtonStyle.Primary)
+    .setEmoji('🎮')
+    .setLabel(`Mode`)
+    .setCustomId('edit_game_mode');
+};
+
+const editStartDate = () => {
+  return new ButtonBuilder()
+    .setStyle(ButtonStyle.Primary)
+    .setEmoji('🗓')
+    .setLabel(`Date`)
+    .setCustomId('edit_start_date');
+};
