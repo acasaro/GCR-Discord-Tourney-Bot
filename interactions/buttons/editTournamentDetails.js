@@ -4,10 +4,17 @@ const {
   TextInputBuilder,
   TextInputStyle,
 } = require('discord.js');
+const { getTournamentByCategoryId } = require('../../common/utility-functions');
 
 module.exports = {
   id: 'show_edit_tournament',
   async execute(interaction) {
+    const { channel } = interaction;
+    const parentChannelId = channel.parentId;
+    const tournament = await getTournamentByCategoryId(parentChannelId);
+
+    const { title, description } = tournament;
+
     // Create the modal
     const modal = new ModalBuilder()
       .setCustomId('edit_tournament_modal')
@@ -17,12 +24,14 @@ module.exports = {
     const tournamentNameInput = new TextInputBuilder()
       .setCustomId('tournament_name')
       .setLabel('Tournament Name')
-      .setStyle(TextInputStyle.Short);
+      .setStyle(TextInputStyle.Short)
+      .setValue(title || '');
 
     const tournamentInfoInput = new TextInputBuilder()
       .setCustomId('tournament_info')
       .setLabel('Tournament information')
-      .setStyle(TextInputStyle.Paragraph);
+      .setStyle(TextInputStyle.Paragraph)
+      .setValue(description || '');
 
     const firstActionRow = new ActionRowBuilder().addComponents(
       tournamentNameInput,

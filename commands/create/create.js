@@ -42,8 +42,9 @@ module.exports = {
         lobby_channel_id: response.lobbyChannel.id.toString(),
         status: 'draft',
       });
+
       await require('../../messages/TournamentAdminMessage').execute(
-        tournament.id,
+        tournament,
         response.newAdminChannel,
       );
 
