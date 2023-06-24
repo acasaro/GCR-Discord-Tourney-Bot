@@ -155,7 +155,28 @@ async function getRegisteredUsers(tournamentId) {
   }
 }
 
+/**
+ ***************************************************
+ * @name updateCategoryChannelName
+ * @param {*} categoryChannel
+ * @param {*} newTitle
+ * @returns Promise
+ ***************************************************
+ */
+async function updateCategoryChannelName(categoryChannel, newTitle) {
+  try {
+    const updatedCategory = await categoryChannel.setName(newTitle);
+    return console.log(
+      `Category channel title updated: ${updatedCategory.name}`,
+    );
+  } catch (error) {
+    console.error('Error updating category channel title:', error);
+    return error;
+  }
+}
+
 module.exports = {
+  updateCategoryChannelName,
   getRegisteredUsers,
   updateTournament,
   deleteRegisteredTournamentUsers,
