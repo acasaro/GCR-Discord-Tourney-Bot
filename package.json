@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node -r dotenv/config index.js",
+    "start": "nodemon -r dotenv/config index.js",
     "migrate": "cd backend && npx sequelize-cli db:migrate && cd ../",
     "seed": "cd backend && npx npx sequelize-cli db:seed:all && cd ../",
     "deploy": "node -r dotenv/config deploy-commands.js"
@@ -18,12 +18,15 @@
   "author": "Anthony Asaro",
   "license": "ISC",
   "dependencies": {
-    "chalk": "^5.2.0",
+    "chalk": "4.1.2",
     "discord-api-types": "^0.37.43",
     "discord.js": "^14.11.0",
     "dotenv": "^16.1.4",
     "sequelize": "^6.32.0",
     "sequelize-cli": "^6.6.1",
     "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
