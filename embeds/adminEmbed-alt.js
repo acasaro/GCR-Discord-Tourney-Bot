@@ -17,25 +17,29 @@ module.exports = {
         .setFooter(footer)
         .addFields({
           name: '\u200B',
-          value: `📝 Name: ${title} \n 📝 Details: ${description} \n 📝 Game Mode: ${game_mode} \n 📆 Start Date: ${startDate} \n `,
+          value: `📝 Name: **${title}** \n📆 Start Date: **${startDate}** \n📝 Game Mode: **${game_mode}** \n`,
+        })
+        .addFields({
+          name: '📝 Info:',
+          value: description ? `\`\`\`${description}\`\`\`` : '\u200B',
         })
         .addFields(
-          { name: '\u200B', value: '\u200B' },
+          // { name: '\u200B', value: '\u200B' },
           {
             name: '**BUTTONS**',
-            value: `🏁 Starts the tournament \n ✅ Starts the check in feature\n 📣 Posts tourney to <#${channels.tourney_bot_test}> - </move:${commands.move}> \n ⛔ Un-publish: Un-publishes the entry portal \n ✏️ Edits tournament details \n 🎮 Edits tournament game mode \n 🗑️ Deletes the tournament `,
+            value: `🏁 Start tournament \n✅ Start check in feature\n📣 Posts tourney to <#${channels.tourney_bot_test}> - </move:${commands.move}> \n⛔ Removes posted announcement \n✏️ Edits tournament details \n🎮 Edits tournament game mode \n🗑️ Deletes the tournament `,
           },
         );
 
       const row1 = new ActionRowBuilder().addComponents(
-        start({ isDisabled: true }),
+        start({ isDisabled: false }),
         editDetails(),
         editGameMode(),
         startCheckin({ isDisabled: true }),
       );
       const row2 = new ActionRowBuilder().addComponents(
         editStartDate(),
-        publish({ isDisabled: true }),
+        publish({ isDisabled: false }),
         unpublish({ isDisabled: true }),
         deleteTournament(),
       );

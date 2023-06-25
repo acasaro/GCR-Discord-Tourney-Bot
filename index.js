@@ -4,6 +4,7 @@ const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { config } = require('./config');
 const { token } = config;
 const { DataTypes } = require('sequelize');
+const { logDiscord } = require('./common/utility-logging');
 
 const bot = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -32,9 +33,9 @@ for (const folder of commandFolders) {
     if ('data' in command && 'execute' in command) {
       bot.commands.set(command.data.name, command);
     } else {
-      console.log(
-        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`,
-      );
+      // console.log(
+      //   `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`,
+      // );
     }
   }
 }
@@ -63,7 +64,7 @@ const buttonCommands = fs.readdirSync('./interactions/buttons');
 for (const module of buttonCommands) {
   const command = require(`./interactions/buttons/${module}`);
   bot.buttonCommands.set(command.id, command);
-  console.log(`${command.id} Button command successfully loaded...`);
+  logDiscord(command.id, `Button command`);
 }
 
 // Registration of Modal-Command Interactions.
@@ -73,7 +74,7 @@ const modalCommands = fs.readdirSync('./interactions/modals');
 for (const module of modalCommands) {
   const command = require(`./interactions/modals/${module}`);
   bot.modalCommands.set(command.id, command);
-  console.log(`${command.id} Modal command successfully loaded...`);
+  logDiscord(command.id, `Modal command`);
 }
 
 // Registration of select-menus Interactions
@@ -85,7 +86,7 @@ const selectMenus = fs.readdirSync('./interactions/select-menus');
 for (const module of selectMenus) {
   const command = require(`./interactions/select-menus/${module}`);
   bot.selectCommands.set(command.id, command);
-  console.log(`${command.id} Select menu successfully loaded...`);
+  logDiscord(command.id, `Select menu`);
 }
 
 bot.login(token);
