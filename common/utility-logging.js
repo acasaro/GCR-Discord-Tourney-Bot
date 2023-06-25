@@ -5,9 +5,7 @@ const chalk = require('chalk');
 const discordBlue = chalk.hex('#717EEF');
 
 function db(message) {
-  console.log(
-    `[${chalk.yellowBright('SQLite')}]-${chalk.yellowBright(message)}`,
-  );
+  console.log(`[${chalk.yellowBright('SQLite')}]-${message}`);
 }
 
 function info(message) {
@@ -15,11 +13,11 @@ function info(message) {
 }
 
 function success(message) {
-  console.log(chalk.greenBright(message));
+  console.log(chalk.green(message));
 }
 
 function error(message) {
-  console.log(chalk.redBright(message));
+  console.log(chalk.red(message));
 }
 
 function discord(commandName, message) {
