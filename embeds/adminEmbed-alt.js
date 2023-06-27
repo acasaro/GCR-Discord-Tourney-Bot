@@ -7,7 +7,7 @@ module.exports = {
   async AdminEmbed(props) {
     const { tournament } = props;
     try {
-      const { title, description, organizer_id, startDate, game_mode } =
+      const { title, description, organizer_id, timestamp, game_mode } =
         tournament;
       const embed = new EmbedBuilder()
         .setTitle(`GCR Tournament Configuration `)
@@ -17,7 +17,7 @@ module.exports = {
         .setFooter(footer)
         .addFields({
           name: '\u200B',
-          value: `📝 Name: **${title}** \n📆 Start Date: **${startDate}** \n📝 Game Mode: **${game_mode}** \n`,
+          value: `📝 Name: **${title}** \n📆 Start Date: **${timestamp}** \n📝 Game Mode: **${game_mode}** \n`,
         })
         .addFields({
           name: '📝 Info:',

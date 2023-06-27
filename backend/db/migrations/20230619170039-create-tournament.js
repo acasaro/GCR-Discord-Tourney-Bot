@@ -18,8 +18,14 @@ module.exports = {
       organizer_id: {
         type: Sequelize.STRING,
       },
-      startDate: {
-        type: Sequelize.DATE,
+      start_date: {
+        type: Sequelize.STRING,
+      },
+      start_time: {
+        type: Sequelize.STRING,
+      },
+      timestamp: {
+        type: Sequelize.STRING,
       },
       publish_channel_id: {
         type: Sequelize.STRING,
