@@ -1,6 +1,8 @@
 const { tournamentRankedRoles } = require('./constants/discord');
-const db = require('../backend/db/models');
-const { Tournament, Registration } = db;
+const db = require('../backend/db');
+const { logError } = require('./utility-logging');
+const { models } = db;
+const { Tournament, Registration } = models;
 /**
  ***************************************************
  * @name getUserRankedRole
@@ -118,6 +120,44 @@ async function updateTournament(tournamentId, updatedValues) {
 
 /**
  ***************************************************
+ * @name deleteTournament
+ * @param {*} tournamentId
+ * @returns Promise
+ ***************************************************
+ */
+async function deleteTournament(tournamentId) {
+  const t = await db.transaction();
+
+  try {
+    await Tournament.destroy(
+      {
+        where: {
+          id: tournamentId,
+        },
+      },
+      { transaction: t },
+    );
+
+    await Registration.destroy(
+      {
+        where: {
+          tournament_id: tournamentId,
+        },
+      },
+      { transaction: t },
+    );
+
+    return await t.commit();
+  } catch (error) {
+    logError(error);
+    await t.rollback();
+
+    return error;
+  }
+}
+
+/**
+ ***************************************************
  * @name getRegisteredUsers
  * @param {*} tournamentId
  * @returns Array registered users in a tournament
@@ -183,4 +223,5 @@ module.exports = {
   registerTournamentUser,
   getUserRankedRole,
   getTournamentByCategoryId,
+  deleteTournament,
 };

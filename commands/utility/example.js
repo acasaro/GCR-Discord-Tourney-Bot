@@ -6,8 +6,9 @@
 
 const { SlashCommandBuilder } = require('discord.js');
 const { getUserRankedRole } = require('../../common/utility-functions');
-const db = require('../../backend/db/models');
-const { User } = db;
+const db = require('../../backend/db');
+const { models } = db;
+const { User } = models;
 
 module.exports = {
   name: 'test',

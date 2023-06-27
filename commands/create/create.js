@@ -1,18 +1,12 @@
-/**
- * @file Create
- * @type Slash Cmd
- * @description Creates initial setup for new tournament
- */
-
+const db = require('../../backend/db');
+const { models } = db;
+const { Tournament } = models;
+const { config } = require('../../config');
 const {
   SlashCommandBuilder,
   ChannelType,
   PermissionsBitField,
 } = require('discord.js');
-const { config } = require('../../config');
-const db = require('../../backend/db/models');
-const { Tournament } = db;
-
 module.exports = {
   name: 'create',
   description: 'Create a tournament',
