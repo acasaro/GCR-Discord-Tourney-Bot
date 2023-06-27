@@ -32,12 +32,14 @@ module.exports = {
     await creatTournamentChannels(interaction.client).then(async response => {
       const tournament = await Tournament.create({
         title: 'New Tournament',
-        description: null,
+        description: 'Not specified',
         game_mode: '2v2',
         organizer_id: interaction.member.user.id.toString(),
         admin_channel_id: response.newAdminChannel.id.toString(),
         parent_channel_id: response.newAdminChannel.parentId.toString(),
-        startDate: null,
+        start_date: null,
+        start_time: null,
+        timestamp: 'Not specified',
         publish_location_id: null,
         lobby_channel_id: response.lobbyChannel.id.toString(),
         status: 'draft',
