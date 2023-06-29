@@ -22,6 +22,7 @@ module.exports = {
 
     // Merge tournament values with new modal values
     const { admin_message_id } = tournament;
+
     const updatedTournamentValues = {
       ...tournament,
       title: tournamentName,

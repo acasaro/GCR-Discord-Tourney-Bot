@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       admin_message_id: DataTypes.STRING,
       publish_message_id: DataTypes.STRING,
       checkin_message_id: DataTypes.STRING,
+      invited_roles: DataTypes.STRING,
     },
     {
       sequelize,

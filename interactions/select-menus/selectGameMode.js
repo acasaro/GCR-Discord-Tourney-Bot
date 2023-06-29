@@ -22,23 +22,22 @@ module.exports = {
       const parentChannelId = channel.parentId;
       const tournament = await getTournamentByCategoryId(parentChannelId);
       const selectedGameMode = interaction?.values[0];
-
       // Update tournament DB
       await updateTournament(tournament.id, {
         game_mode: selectedGameMode,
       });
 
+      const updatedAdminMessage = await AdminEmbed({
+        tournament: {
+          ...tournament,
+          game_mode: selectedGameMode,
+        },
+      });
+      console.log(selectedGameMode);
       // Edit Admin message with updated values
       const getAdminMessage = await interaction.channel.messages.fetch(
         tournament.admin_message_id,
       );
-
-      const updatedAdminMessage = await AdminEmbed({
-        tournament: {
-          game_mode: selectedGameMode,
-          ...tournament,
-        },
-      });
 
       await getAdminMessage.edit(updatedAdminMessage);
 
@@ -48,7 +47,7 @@ module.exports = {
           components: [],
           ephemeral: true,
         })
-        .then(reply => {
+        .then(async reply => {
           // Wait for the specified timeout duration
           setTimeout(() => {
             // Delete the reply after the timeout
