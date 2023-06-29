@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
       tournament_id: DataTypes.INTEGER,
       username: DataTypes.STRING,
       discord_id: DataTypes.STRING,
-      discord_rank_role_id: DataTypes.STRING,
-      discord_rank_role_name: DataTypes.STRING,
+      rank_role_name: DataTypes.STRING,
+      rank_value: DataTypes.INTEGER,
     },
     {
       sequelize,

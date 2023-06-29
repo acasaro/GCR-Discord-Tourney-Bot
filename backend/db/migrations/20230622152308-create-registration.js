@@ -18,11 +18,11 @@ module.exports = {
       discord_id: {
         type: Sequelize.STRING,
       },
-      discord_rank_role_id: {
+      rank_role_name: {
         type: Sequelize.STRING,
       },
-      discord_rank_role_name: {
-        type: Sequelize.STRING,
+      rank_value: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
