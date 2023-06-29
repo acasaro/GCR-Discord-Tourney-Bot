@@ -1,7 +1,8 @@
 const { ChannelType, PermissionsBitField } = require('discord.js');
 const { config } = require('../../config');
-const db = require('../../backend/db/models');
-const { Tournament } = db;
+const db = require('../../backend/db');
+const { models } = db;
+const { Tournament } = models;
 
 module.exports = {
   id: 'create_tourney',

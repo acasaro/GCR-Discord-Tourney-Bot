@@ -54,6 +54,9 @@ module.exports = {
       status: {
         type: Sequelize.STRING,
       },
+      invited_roles: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

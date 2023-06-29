@@ -1,5 +1,6 @@
-const db = require('../../backend/db/models');
-const { Tournament } = db;
+const db = require('../../backend/db');
+const { models } = db;
+const { Tournament } = models;
 const { ActionRowBuilder, ButtonStyle, ButtonBuilder } = require('discord.js');
 const { CheckinEmbedMessage } = require('../../embeds/checkinEmbed');
 

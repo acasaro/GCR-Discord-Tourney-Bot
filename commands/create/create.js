@@ -1,18 +1,12 @@
-/**
- * @file Create
- * @type Slash Cmd
- * @description Creates initial setup for new tournament
- */
-
+const db = require('../../backend/db');
+const { models } = db;
+const { Tournament } = models;
+const { config } = require('../../config');
 const {
   SlashCommandBuilder,
   ChannelType,
   PermissionsBitField,
 } = require('discord.js');
-const { config } = require('../../config');
-const db = require('../../backend/db/models');
-const { Tournament } = db;
-
 module.exports = {
   name: 'create',
   description: 'Create a tournament',
@@ -32,7 +26,7 @@ module.exports = {
     await creatTournamentChannels(interaction.client).then(async response => {
       const tournament = await Tournament.create({
         title: 'New Tournament',
-        description: 'Not specified',
+        description: `It's time for a new tournament! If you want to participate gather in the tournament lobby PROMPTLY at the above time. Check-in will begin exactly at tournament start time and will close 5 minutes after. Don't be late!`,
         game_mode: '2v2',
         organizer_id: interaction.member.user.id.toString(),
         admin_channel_id: response.newAdminChannel.id.toString(),
@@ -40,7 +34,7 @@ module.exports = {
         start_date: null,
         start_time: null,
         timestamp: 'Not specified',
-        publish_location_id: null,
+        publish_channel_id: interaction.channel.id,
         lobby_channel_id: response.lobbyChannel.id.toString(),
         status: 'draft',
       });

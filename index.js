@@ -3,7 +3,6 @@ const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { config } = require('./config');
 const { token } = config;
-const { DataTypes } = require('sequelize');
 const { logDiscord } = require('./common/utility-logging');
 
 const bot = new Client({ intents: [GatewayIntentBits.Guilds] });

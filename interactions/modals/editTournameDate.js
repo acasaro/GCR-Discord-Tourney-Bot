@@ -28,7 +28,9 @@ module.exports = {
 
     // Update tournament in DB
     await updateTournament(tournament.id, {
-      start_date: timeString,
+      start_date: startDate,
+      start_time: startTime,
+      timestamp: timeString,
     });
 
     // Edit Admin message with updated values
