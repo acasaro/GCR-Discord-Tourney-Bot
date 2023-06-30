@@ -2,7 +2,7 @@ const { tournamentRankedRoles } = require('./constants/discord');
 const db = require('../backend/db');
 const { logError } = require('./utility-logging');
 const { models } = db;
-const { Tournament, Registration } = models;
+const { Tournament, Registration, Team } = models;
 /**
  ***************************************************
  * @name getUserRankedRole
@@ -50,6 +50,7 @@ async function getTournamentByCategoryId(categoryChannelId) {
     return error;
   }
 }
+
 /**
  ***************************************************
  * @name registerTournamentUser
@@ -70,6 +71,38 @@ async function registerTournamentUser(newRegistrationValues) {
     } else {
       await Registration.create(newRegistrationValues);
       return 'You are successfully checked-in';
+    }
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
+ * @name updateRegisteredUser
+ * @param {*} updatedValues object
+ * @returns updates status from registration
+ ***************************************************
+ */
+async function updateRegisteredUser(updatedValues) {
+  try {
+    const userExists = await Registration.findOne({
+      where: {
+        discord_id: updatedValues.discord_id,
+        tournament_id: updatedValues.tournament_id,
+      },
+    });
+    if (!userExists) {
+      return console.log(`User registration doesn't exist`);
+    } else {
+      await Registration.update(updatedValues, {
+        where: {
+          discord_id: updatedValues.discord_id,
+          tournament_id: updatedValues.tournament_id,
+        },
+      });
+      return console.log('User registration successfully updated');
     }
   } catch (error) {
     console.log(error);
@@ -181,6 +214,46 @@ async function getRegisteredUsers(tournamentId) {
 
 /**
  ***************************************************
+ * @name createTournamentTeam
+ * @param {*} newTeamValues object
+ * @returns Tournament from db
+ ***************************************************
+ */
+async function createTournamentTeam(newTeamValues) {
+  try {
+    await Team.create(newTeamValues);
+    return console.log(`${newTeamValues.name} successfully created`);
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
+ * @name getTournamentTeams
+ * @param {*} tournamentId
+ * @returns Array teams matched for tournament
+ ***************************************************
+ */
+async function getTournamentTeams(tournamentId) {
+  try {
+    const queryTeams = await Teams.findAll({
+      where: {
+        tournament_id: tournamentId,
+      },
+    });
+
+    const response = queryTeams.map(({ dataValues }) => dataValues);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
  * @name updateCategoryChannelName
  * @param {*} categoryChannel
  * @param {*} newTitle
@@ -201,6 +274,7 @@ async function updateCategoryChannelName(categoryChannel, newTitle) {
 
 module.exports = {
   updateCategoryChannelName,
+  updateRegisteredUser,
   getRegisteredUsers,
   updateTournament,
   deleteRegisteredTournamentUsers,
@@ -208,4 +282,6 @@ module.exports = {
   getUserRankedRole,
   getTournamentByCategoryId,
   deleteTournament,
+  getTournamentTeams,
+  createTournamentTeam,
 };

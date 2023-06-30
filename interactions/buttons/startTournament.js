@@ -7,6 +7,8 @@ const { teamSizes } = require('../../common/constants/tournaments');
 const {
   getTournamentByCategoryId,
   getRegisteredUsers,
+  createTournamentTeam,
+  updateRegisteredUser,
 } = require('../../common/utility-functions');
 const { TeamEmbedMessage } = require('../../embeds/teamEmbed');
 const { manageTeamsEmbed } = require('../../embeds/manageTeamsEmbed');
@@ -80,6 +82,20 @@ module.exports = {
         interaction.editReply(`Added teams to a new thread: ${threadChannel}`);
 
         teams.forEach(async team => {
+          await createTournamentTeam({
+            name: team.teamName,
+            players: JSON.stringify(team.players),
+            skill_level: team.skillValue,
+            voice_channel_id: null,
+            tournament_id: tournament.id,
+          });
+
+          team.players.forEach(async player => {
+            await updateRegisteredUser({
+              ...player,
+              status: 'matched',
+            });
+          });
           await threadChannel.send(
             await TeamEmbedMessage({ team, interaction }),
           );
@@ -135,9 +151,6 @@ module.exports = {
         //   );
         // }
 
-        // console.log(balancedTeams);
-        // console.log(remainingPlayers);
-        // console.log(balancedTeams.map(item => item));
         return;
       }
     } catch (error) {

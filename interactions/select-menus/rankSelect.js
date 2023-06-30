@@ -30,6 +30,7 @@ module.exports = {
           rank_role_name: userRank[0].name,
           rank_value: parseInt(userRank[0].value),
           emoji_id: userRank[0].emoji,
+          status: 'checked-in',
         };
         console.log(newRegistration);
 
@@ -49,7 +50,7 @@ module.exports = {
       }
     } catch (error) {
       await interaction.editReply({
-        content: `There was an issue updating game mode. \nError catch: \n\`\`\` ${error}\n\`\`\``,
+        content: `There was an issue checking you in. \nError catch: \n\`\`\` ${error}\n\`\`\``,
         components: [],
       });
       console.log(error);

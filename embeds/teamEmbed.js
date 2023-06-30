@@ -27,13 +27,10 @@ const TeamEmbedMessage = ({ interaction, team, ...props }) => {
       .setColor(0x00ffff);
 
     const kickTeam = () => {
-      return (
-        new ButtonBuilder()
-          .setStyle(ButtonStyle.Danger)
-          // .setEmoji(checkinActive ? `✔️` : `🚫`)
-          .setLabel(`Remove`)
-          .setCustomId('remove_team')
-      );
+      return new ButtonBuilder()
+        .setStyle(ButtonStyle.Danger)
+        .setLabel(`Remove`)
+        .setCustomId('remove_team');
     };
 
     const row = new ActionRowBuilder().addComponents(kickTeam());
