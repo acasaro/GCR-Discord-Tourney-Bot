@@ -59,7 +59,7 @@ async function creatTournamentChannels(client) {
 
   try {
     const category = await guild.channels.create({
-      name: `🏆 New Tournament`,
+      name: `New Tournament`,
       type: ChannelType.GuildCategory,
     });
 
@@ -80,7 +80,7 @@ async function creatTournamentChannels(client) {
     });
 
     const lobbyChannel = await guild.channels.create({
-      name: `🕐 Tournament Lobby`,
+      name: `🏆 Tournament Lobby`,
       type: ChannelType.GuildVoice,
       parent: category.id,
       permissionOverwrites: [

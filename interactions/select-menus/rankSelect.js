@@ -29,6 +29,7 @@ module.exports = {
           discord_id: member.user.id.toString(),
           rank_role_name: userRank[0].name,
           rank_value: parseInt(userRank[0].value),
+          emoji_id: userRank[0].emoji,
         };
         console.log(newRegistration);
 

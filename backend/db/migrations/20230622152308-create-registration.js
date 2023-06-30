@@ -21,9 +21,13 @@ module.exports = {
       rank_role_name: {
         type: Sequelize.STRING,
       },
+      emoji_id: {
+        type: Sequelize.STRING,
+      },
       rank_value: {
         type: Sequelize.INTEGER,
       },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

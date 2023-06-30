@@ -171,23 +171,7 @@ async function getRegisteredUsers(tournamentId) {
       },
     });
 
-    const response = queryRegistration.map(({ dataValues }) => {
-      const {
-        username,
-        tournament_id,
-        discord_id,
-        discord_rank_role_id,
-        discord_rank_role_name,
-      } = dataValues;
-
-      return {
-        username,
-        tournament_id,
-        discord_id,
-        discord_rank_role_id,
-        discord_rank_role_name,
-      };
-    });
+    const response = queryRegistration.map(({ dataValues }) => dataValues);
     return response;
   } catch (error) {
     console.log(error);

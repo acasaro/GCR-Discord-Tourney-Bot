@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       discord_id: DataTypes.STRING,
       rank_role_name: DataTypes.STRING,
       rank_value: DataTypes.INTEGER,
+      emoji_id: DataTypes.STRING,
     },
     {
       sequelize,
