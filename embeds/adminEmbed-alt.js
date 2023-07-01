@@ -7,10 +7,16 @@ module.exports = {
   async AdminEmbed(props) {
     const { tournament } = props;
     try {
-      const { title, description, organizer_id, timestamp, game_mode, status } =
-        tournament;
+      const {
+        title,
+        description,
+        organizer_id,
+        timestamp,
+        game_mode,
+        publish_channel_id,
+        status,
+      } = tournament;
 
-      console.log(status);
       const embed = new EmbedBuilder()
         .setTitle(`GCR Tournament Configuration `)
         .setColor(0x00b9ff)
@@ -26,7 +32,7 @@ module.exports = {
           // { name: '\u200B', value: '\u200B' },
           {
             name: '**BUTTONS**',
-            value: `🏁 Start tournament \n✅ Start check in feature\n📣 Posts tourney to <#${channels.tourney_bot_test}> - </move:${commands.move}> \n⛔ Removes posted announcement \n✏️ Edits tournament details \n🎮 Edits tournament game mode \n👥 Attaches roles to the WHO tournament message \n🗑️ Deletes the tournament `,
+            value: `🏁 Start tournament \n✅ Start check in feature\n📣 Posts tourney to <#${publish_channel_id}> - </move:${commands.move}> \n⛔ Removes posted announcement \n✏️ Edits tournament details \n🎮 Edits tournament game mode \n👥 Attaches roles to the WHO tournament message \n🗑️ Deletes the tournament `,
           },
         );
 

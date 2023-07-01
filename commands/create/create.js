@@ -34,7 +34,7 @@ module.exports = {
         start_date: null,
         start_time: null,
         timestamp: 'Not specified',
-        publish_channel_id: interaction.channel.id,
+        publish_channel_id: interaction.channel.id.toString(),
         lobby_channel_id: response.lobbyChannel.id.toString(),
         status: 'draft',
       });
@@ -70,6 +70,10 @@ async function creatTournamentChannels(client) {
       permissionOverwrites: [
         {
           id: '1118501937768312912',
+          allow: [PermissionsBitField.Flags.ViewChannel],
+        },
+        {
+          id: '1118382375852834896',
           allow: [PermissionsBitField.Flags.ViewChannel],
         },
         {
