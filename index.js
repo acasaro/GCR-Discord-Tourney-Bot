@@ -5,7 +5,14 @@ const { config } = require('./config');
 const { token } = config;
 const { logDiscord } = require('./common/utility-logging');
 
-const bot = new Client({ intents: [GatewayIntentBits.Guilds] });
+const bot = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildEmojisAndStickers,
+  ],
+});
 
 // Collection of Commands, Slash Commands and cooldowns
 // ----------------------------------------------------------------------

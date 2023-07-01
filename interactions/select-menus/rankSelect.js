@@ -3,6 +3,7 @@ const {
   getTournamentByCategoryId,
   updateTournament,
   registerTournamentUser,
+  checkIfExists,
 } = require('../../common/utility-functions');
 
 const timeoutDuration = 5000;

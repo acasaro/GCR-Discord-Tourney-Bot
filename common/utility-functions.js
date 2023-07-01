@@ -3,6 +3,8 @@ const db = require('../backend/db');
 const { logError } = require('./utility-logging');
 const { models } = db;
 const { Tournament, Registration, Team } = models;
+const { Op } = require('sequelize');
+
 /**
  ***************************************************
  * @name getUserRankedRole
@@ -41,7 +43,18 @@ async function getTournamentByCategoryId(categoryChannelId) {
   try {
     const tournament = await Tournament.findOne({
       where: {
-        parent_channel_id: categoryChannelId,
+        [Op.or]: [
+          {
+            parent_channel_id: {
+              [Op.eq]: categoryChannelId,
+            },
+          },
+          {
+            admin_channel_id: {
+              [Op.eq]: categoryChannelId,
+            },
+          },
+        ],
       },
     });
     return tournament.dataValues;
@@ -51,6 +64,27 @@ async function getTournamentByCategoryId(categoryChannelId) {
   }
 }
 
+/**
+ ***************************************************
+ * @name checkIfExists
+ * @param {*} checkIfExists object
+ * @returns Tournament from db
+ ***************************************************
+ */
+async function checkIfExists(tournamentId, userId) {
+  try {
+    const doesExist = await Registration.findOne({
+      where: {
+        discord_id: userId,
+        tournament_id: tournamentId,
+      },
+    });
+    return doesExist;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
 /**
  ***************************************************
  * @name registerTournamentUser
@@ -238,7 +272,7 @@ async function createTournamentTeam(newTeamValues) {
  */
 async function getTournamentTeams(tournamentId) {
   try {
-    const queryTeams = await Teams.findAll({
+    const queryTeams = await Team.findAll({
       where: {
         tournament_id: tournamentId,
       },
@@ -284,4 +318,5 @@ module.exports = {
   deleteTournament,
   getTournamentTeams,
   createTournamentTeam,
+  checkIfExists,
 };
