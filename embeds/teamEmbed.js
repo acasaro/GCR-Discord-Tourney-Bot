@@ -23,14 +23,18 @@ const TeamEmbedMessage = ({ interaction, team, ...props }) => {
 
   try {
     const teamEmbed = new EmbedBuilder()
-      .setDescription(playerList)
-      .setColor(0x00ffff);
+      .setDescription(`${playerList}`)
+      .setColor(0x00ffff)
+      .setFooter({ text: `⚖️ ${team.skillValue} - Team MMR` });
 
     const kickTeam = () => {
-      return new ButtonBuilder()
-        .setStyle(ButtonStyle.Danger)
-        .setLabel(`Remove`)
-        .setCustomId('remove_team');
+      return (
+        new ButtonBuilder()
+          .setStyle(ButtonStyle.Danger)
+          // .setEmoji('👞')
+          .setLabel(`Remove`)
+          .setCustomId('remove_team')
+      );
     };
 
     const row = new ActionRowBuilder().addComponents(kickTeam());
@@ -38,7 +42,7 @@ const TeamEmbedMessage = ({ interaction, team, ...props }) => {
     return {
       content: `**${teamName}**`,
       embeds: [teamEmbed],
-      components: [row],
+      // components: [row],
     };
   } catch (error) {
     console.log(error);

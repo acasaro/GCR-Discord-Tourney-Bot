@@ -29,11 +29,21 @@ const manageTeamsEmbed = ({
       return new ButtonBuilder()
         .setStyle(ButtonStyle.Success)
         .setEmoji(`🔈`)
-        .setLabel(`Create Voice Channels`)
+        .setLabel(`Transfer to Voice Channels`)
         .setCustomId('send_to_voice');
     };
+    const removeAllTeamsButton = () => {
+      return new ButtonBuilder()
+        .setStyle(ButtonStyle.Danger)
+        .setEmoji(`🗑`)
+        .setLabel(`Remove All`)
+        .setCustomId('remove_all_teams');
+    };
 
-    const row = new ActionRowBuilder().addComponents(sendToVoiceButton());
+    const row = new ActionRowBuilder().addComponents(
+      sendToVoiceButton(),
+      removeAllTeamsButton(),
+    );
 
     return {
       content: `<@${organizer_id}>`,

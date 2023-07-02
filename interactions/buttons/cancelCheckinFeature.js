@@ -1,6 +1,7 @@
 const {
   getTournamentByCategoryId,
   deleteRegisteredTournamentUsers,
+  updateTournament,
 } = require('../../common/utility-functions');
 
 module.exports = {
@@ -33,6 +34,11 @@ module.exports = {
       );
 
       await checkinMessage.delete(checkin_message_id);
+
+      await updateTournament(tournament.id, {
+        checkin_message_id: null,
+        checkin_active: false,
+      });
 
       return await interaction.update({
         content: 'Check-in has been canceled',

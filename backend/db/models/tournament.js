@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       publish_message_id: DataTypes.STRING,
       checkin_message_id: DataTypes.STRING,
       invited_roles: DataTypes.STRING,
+      checkin_active: DataTypes.BOOLEAN,
     },
     {
       sequelize,

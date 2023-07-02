@@ -15,6 +15,7 @@ module.exports = {
         game_mode,
         publish_channel_id,
         status,
+        checkin_active,
       } = tournament;
 
       const embed = new EmbedBuilder()
@@ -32,7 +33,7 @@ module.exports = {
           // { name: '\u200B', value: '\u200B' },
           {
             name: '**BUTTONS**',
-            value: `🏁 Start tournament \n✅ Start check in feature\n📣 Posts tourney to <#${publish_channel_id}> - </move:${commands.move}> \n⛔ Removes posted announcement \n✏️ Edits tournament details \n🎮 Edits tournament game mode \n👥 Attaches roles to the WHO tournament message \n🗑️ Deletes the tournament `,
+            value: `🏁 Start tournament \n✅ Start check in feature\n📣 Posts tourney to <#${publish_channel_id}> - </move:${commands.move}> \n⛔ Removes posted announcement \n✏️ Edits tournament details \n🎮 Edits tournament game mode \n👥 Invite roles to tournament \n🗑️ Deletes the tournament `,
           },
         );
 
@@ -40,7 +41,7 @@ module.exports = {
         start({ isDisabled: false }),
         editDetails(),
         editGameMode(),
-        startCheckin({ isDisabled: true }),
+        startCheckin({ isDisabled: checkin_active }),
         editStartDate(),
       );
       const row2 = new ActionRowBuilder().addComponents(
@@ -54,6 +55,9 @@ module.exports = {
         embeds: [embed],
         components: [row1, row2],
         ephemeral: false,
+        allowed_mentions: {
+          parse: [],
+        },
       };
     } catch (error) {
       console.log(error);
@@ -94,13 +98,14 @@ const unpublish = ({ isDisabled = false, ...props }) => {
   );
 };
 
-const startCheckin = () => {
+const startCheckin = ({ isDisabled = false, ...props }) => {
   return (
     new ButtonBuilder()
       .setStyle(ButtonStyle.Primary)
       .setEmoji('✅')
       // .setLabel(`Checkin`)
       .setCustomId('start_tourney_checkin')
+      .setDisabled(isDisabled || false)
   );
 };
 

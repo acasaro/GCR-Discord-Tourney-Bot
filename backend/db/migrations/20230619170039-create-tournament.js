@@ -57,6 +57,10 @@ module.exports = {
       invited_roles: {
         type: Sequelize.STRING,
       },
+      checkin_active: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

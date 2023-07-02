@@ -37,6 +37,7 @@ module.exports = {
         publish_channel_id: interaction.channel.id.toString(),
         lobby_channel_id: response.lobbyChannel.id.toString(),
         status: 'draft',
+        checkin_active: false,
       });
 
       await require('../../messages/TournamentAdminMessage').execute(
@@ -84,8 +85,8 @@ async function creatTournamentChannels(client) {
     });
 
     const lobbyChannel = await guild.channels.create({
-      name: `🏆 Tournament Lobby`,
-      type: ChannelType.GuildVoice,
+      name: `🏆 Tournament Stage`,
+      type: ChannelType.GuildStageVoice,
       parent: category.id,
       permissionOverwrites: [
         {

@@ -56,7 +56,9 @@ module.exports = {
           },
         });
 
-        await adminMessage.edit(updatedAdminMessage);
+        await adminMessage.edit({
+          ...updatedAdminMessage,
+        });
 
         // Return Success Reply
         return await interaction.editReply({

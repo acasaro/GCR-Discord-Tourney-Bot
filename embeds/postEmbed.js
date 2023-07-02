@@ -43,6 +43,11 @@ module.exports = {
         .setFooter(footer);
       return {
         embeds: [exampleEmbed],
+        // allowed_mentions: {
+        //   replied_user: false,
+        //   parse: [],
+        //   roles: [],
+        // },
       };
     } catch (error) {
       logError(error);

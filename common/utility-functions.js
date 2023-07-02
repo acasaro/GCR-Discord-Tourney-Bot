@@ -213,6 +213,14 @@ async function deleteTournament(tournamentId) {
       },
       { transaction: t },
     );
+    await Team.destroy(
+      {
+        where: {
+          tournament_id: tournamentId,
+        },
+      },
+      { transaction: t },
+    );
 
     return await t.commit();
   } catch (error) {
@@ -288,6 +296,27 @@ async function getTournamentTeams(tournamentId) {
 
 /**
  ***************************************************
+ * @name deleteTournamentTeam
+ * @param {*} tournamentId
+ * @returns console log
+ ***************************************************
+ */
+async function deleteTournamentTeam(teamId) {
+  try {
+    await Team.destroy({
+      where: {
+        id: teamId,
+      },
+    });
+    return console.log(`Successfully deleted team ${teamId}`);
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
  * @name updateCategoryChannelName
  * @param {*} categoryChannel
  * @param {*} newTitle
@@ -318,5 +347,6 @@ module.exports = {
   deleteTournament,
   getTournamentTeams,
   createTournamentTeam,
+  deleteTournamentTeam,
   checkIfExists,
 };

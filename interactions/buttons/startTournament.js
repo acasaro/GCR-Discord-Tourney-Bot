@@ -25,21 +25,27 @@ module.exports = {
       const players = await getRegisteredUsers(tournament.id);
       const teamSize = teamSizes[tournament.game_mode];
       const teamCount = Math.floor(players.length / teamSize);
-      console.log({ teamCount, teamSize });
       // await interaction.deferUpdate();
-
       await interaction.reply({
         content: `⌛ Generating teams...`,
         components: [],
         embeds: [],
+        ephemeral: true,
       });
 
-      // Make Teams
-
+      if (tournament.checkin_active) {
+        return sendResponse(
+          interaction,
+          'Your tournament is in the middle of a checkin, please end that first.',
+          { ephemeral: true },
+        );
+      }
       if (players.length < teamSize) {
+        // Check if enough players are checked-in
         sendResponse(
           interaction,
           'Not enough checked-in members to make teams.',
+          { ephemeral: true },
         );
         return;
       } else {
@@ -47,19 +53,6 @@ module.exports = {
         // Sort players by rank
         const sortedMembers = sortMembersBySkill(players);
 
-        // Create teams
-        // const teams = [];
-        // while (sortedMembers.length > 0) {
-        //   // Pair highest-ranked player with lowest-ranked player available
-        //   const highRankPlayer = sortedMembers.shift();
-        //   const lowRankPlayer = sortedMembers.pop();
-        //   teams.push({
-        //     teamName: `Team #${count}`,
-        //     players: [highRankPlayer, lowRankPlayer],
-        //     skillValue: highRankPlayer.rank_value + lowRankPlayer.rank_value,
-        //   });
-        //   count++;
-        // }
         let teams = [];
 
         if (teamSize === 1) {
@@ -151,9 +144,9 @@ module.exports = {
 // Helper Functions
 // ----------------------------------------------------------------------
 
-async function sendResponse(interaction, response) {
+async function sendResponse(interaction, response, options) {
   try {
-    await interaction.editReply(response);
+    await interaction.editReply({ content: response, ...options });
   } catch (error) {
     console.log(error);
   }
