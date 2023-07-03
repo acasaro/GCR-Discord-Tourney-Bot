@@ -29,13 +29,22 @@ module.exports = {
       description: tournamentInfo,
     };
 
-    // Update category channel name
+    // Get Category Channel
     const categoryChannel =
       guild.channels.cache.get(parentChannelId) ||
       (await guild.channels.fetch(parentChannelId));
+
+    // Get Lobby Channel
+    const lobbyChannel =
+      guild.channels.cache.get(tournament.lobby_channel_id) ||
+      (await guild.channels.fetch(tournament.lobby_channel_id));
+
     // Check if name has changed
     if (categoryChannel.name !== tournamentName) {
       await updateCategoryChannelName(categoryChannel, tournamentName);
+    }
+    if (lobbyChannel.name !== `${tournamentName} Stage`) {
+      await updateCategoryChannelName(lobbyChannel, `${tournamentName} Stage`);
     }
 
     // Update tournament in DB

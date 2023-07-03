@@ -146,6 +146,28 @@ async function updateRegisteredUser(updatedValues) {
 
 /**
  ***************************************************
+ * @name updateTeam
+ * @param {*} updatedValues object
+ * @returns updates status from registration
+ ***************************************************
+ */
+async function updateTeam(teamId, updatedValues) {
+  try {
+    await Team.update(updatedValues, {
+      where: {
+        id: teamId,
+      },
+    });
+
+    return console.log('Team  successfully updated');
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
  * @name deleteRegisteredTournamentUsers
  * @param {*} tournamentId
  * @returns Promise
@@ -336,17 +358,18 @@ async function updateCategoryChannelName(categoryChannel, newTitle) {
 }
 
 module.exports = {
+  getTournamentByCategoryId,
+  getRegisteredUsers,
+  getTournamentTeams,
+  getUserRankedRole,
   updateCategoryChannelName,
   updateRegisteredUser,
-  getRegisteredUsers,
   updateTournament,
-  deleteRegisteredTournamentUsers,
+  updateTeam,
   registerTournamentUser,
-  getUserRankedRole,
-  getTournamentByCategoryId,
-  deleteTournament,
-  getTournamentTeams,
   createTournamentTeam,
+  deleteTournament,
   deleteTournamentTeam,
+  deleteRegisteredTournamentUsers,
   checkIfExists,
 };

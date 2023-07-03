@@ -8,6 +8,7 @@ const {
   getTournamentByCategoryId,
   getRegisteredUsers,
   getTournamentTeams,
+  updateTeam,
 } = require('../../common/utility-functions');
 const { TeamEmbedMessage } = require('../../embeds/teamEmbed');
 const { manageTeamsEmbed } = require('../../embeds/manageTeamsEmbed');
@@ -23,18 +24,17 @@ module.exports = {
         return console.log('Tournament not found');
       } else {
         const teams = await getTournamentTeams(tournament.id);
-        const teamSize = teamSizes[tournament.game_mode];
 
         await interaction.reply({
-          content: `⌛ Generating team channels and moving teams private VC's`,
+          content: `⌛ Generating team channels and moving teams to private VC's`,
           components: [],
           embeds: [],
+          ephemeral: true,
         });
 
         teams.forEach(async (team, i) => {
           const teamName = team.name;
           const teamMembers = JSON.parse(team.players) || [];
-          console.log(teamMembers);
           if (teamMembers.length > 0) {
             teamsCollection[teamName] = teamMembers;
 
@@ -45,12 +45,15 @@ module.exports = {
               parent: tournament.parent_channel_id,
             });
 
+            // Update DB Team
+            await updateTeam(team.id, { voice_channel_id: newChannel.id });
+
             teamMembers.forEach(async player => {
               const member = await guild.members.fetch(player.discord_id);
               // Check if the member is connected to a voice channel
               if (!member.voice.channel) {
                 return channel.send(
-                  `\n\`\`\`${player.username} is not connected to voice. Can't connect to team channel.\n\`\`\``,
+                  `🔇 <@${player.discord_id}> not connected to voice.  \`\`\`Can't connect to team channel.\`\`\``,
                 );
               } else {
                 await member.voice.setChannel(newChannel);
@@ -62,6 +65,7 @@ module.exports = {
           content: `Teams have been moved to private VC's`,
           components: [],
           embeds: [],
+          ephemeral: true,
         });
         return;
       }

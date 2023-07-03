@@ -16,6 +16,7 @@ module.exports = {
         publish_channel_id,
         status,
         checkin_active,
+        invited_roles,
       } = tournament;
 
       const embed = new EmbedBuilder()
@@ -26,14 +27,16 @@ module.exports = {
         .setFooter(footer)
         .addFields({
           name: '\u200B',
-          value: `📝 Name: **${title}** \n📆 When: **${timestamp}** \n📝 Game Mode: **${game_mode}** \n \u200B \n📝 Info: \n*${description}* \n \u200B`,
+          value: `📝 Name: **${title}** \n📆 When: **${timestamp}** \n📝 Game Mode: **${game_mode}** \n👥 Who: **${
+            invited_roles ? invited_roles : 'Not Specified'
+          }**\n \u200B \n📝 Info: \n*${description}* \n \u200B`,
         })
 
         .addFields(
           // { name: '\u200B', value: '\u200B' },
           {
             name: '**BUTTONS**',
-            value: `🏁 Start tournament \n✅ Start check in feature\n📣 Posts tourney to <#${publish_channel_id}> - </move:${commands.move}> \n⛔ Removes posted announcement \n✏️ Edits tournament details \n🎮 Edits tournament game mode \n👥 Invite roles to tournament \n🗑️ Deletes the tournament `,
+            value: `🏁 Start tournament \n✅ Start check in feature\n📣 Posts tourney to <#${publish_channel_id}> \n⛔ Removes posted announcement \n✏️ Edits tournament details \n🎮 Edits tournament game mode \n👥 Invite roles to tournament \n🗑️ Deletes the tournament `,
           },
         );
 

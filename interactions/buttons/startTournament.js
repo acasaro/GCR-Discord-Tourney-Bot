@@ -52,9 +52,15 @@ module.exports = {
         let count = 1;
         // Sort players by rank
         const sortedMembers = sortMembersBySkill(players);
+        const remainingPlayerCount = players.length % teamSize;
+        let remainingPlayers = [];
+        if (remainingPlayerCount > 0) {
+          remainingPlayers = sortedMembers.splice(teamCount * teamSize);
+        }
 
         let teams = [];
 
+        console.log({ remainingPlayerCount, remainingPlayers, sortedMembers });
         if (teamSize === 1) {
           teams = players.map((player, index) => ({
             teamName: `Team #${index + 1}`,
@@ -86,11 +92,10 @@ module.exports = {
             count++;
           }
         }
-        let remainingPlayers =
-          teamSize === 1 ? [] : sortedMembers.slice(teamCount * teamSize);
+
         if (remainingPlayers.length > 0) {
-          remainingMessage = `These players do not have a team: \n
-            ${remainingPlayers.map(player => player.username)}`;
+          remainingMessage = `Some players do not have a team:
+            ${remainingPlayers.map(player => `<@${player.discord_id}>`)}`;
         } else {
           remainingMessage = `All players have a team`;
         }

@@ -32,6 +32,7 @@ module.exports = {
         const postTournamentMessage = await publishChannel.send({
           ...(await PostEmbed({ tournament, organizer, joinUrl })),
         });
+        // await postTournamentMessage.reply(joinUrl);
 
         const updatedTournamentValues = {
           ...tournament,

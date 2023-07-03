@@ -18,7 +18,7 @@ module.exports = {
 
     teams.forEach(team => {
       if (team.voice_channel_id) {
-        const teamVC = guild.channels.cache.get(voice_channel_id);
+        const teamVC = guild.channels.cache.get(team.voice_channel_id);
         channelsToDelete.push(teamVC.delete());
       }
       teamsToDelete.push(deleteTournamentTeam(team.id));

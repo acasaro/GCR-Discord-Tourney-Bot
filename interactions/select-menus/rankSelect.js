@@ -33,7 +33,6 @@ module.exports = {
           emoji_id: userRank[0].emoji,
           status: 'checked-in',
         };
-        console.log(newRegistration);
 
         // Add User to Registrations Table
         const checkinResponse = await registerTournamentUser(newRegistration);

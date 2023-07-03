@@ -9,6 +9,7 @@ module.exports = {
     const {
       description,
       game_mode,
+      invited_roles,
       lobby_channel_id,
       organizer_id,
       timestamp,
@@ -18,6 +19,10 @@ module.exports = {
     try {
       // inside a command, event listener, etc.
 
+      const message = `🏆  __**${title}**__  🏆 \n\n${description} \n\n**TYPE:** ${game_mode} \n**WHEN:** ${timestamp}\n**WHERE:** ${joinUrl}\n\n**WHO:** ${
+        invited_roles ? invited_roles : '@everyone'
+      } \n\n See you all there! \n \u200B`;
+
       const exampleEmbed = new EmbedBuilder()
         .setColor(0x0099ff)
         .setAuthor({
@@ -26,28 +31,22 @@ module.exports = {
         })
         .setTitle(`\n${title}`)
         .setDescription(description)
-        .addFields(
-          {
-            name: '\u200B',
-            value: `TYPE: **${game_mode}** \nWHEN: **${timestamp}** \nWHERE: **<#${lobby_channel_id}>**`,
-          },
-
-          {
-            name: '\u200B',
-            value: `[_**Join Tournament Channel**_](${joinUrl})`,
-          },
-        )
+        .addFields({
+          name: '\u200B',
+          value: ` \n \u200B`,
+        })
 
         .setTimestamp()
         .setThumbnail(logo)
         .setFooter(footer);
       return {
-        embeds: [exampleEmbed],
-        // allowed_mentions: {
-        //   replied_user: false,
-        //   parse: [],
-        //   roles: [],
-        // },
+        content: message,
+        // embeds: [exampleEmbed],
+        allowed_mentions: {
+          replied_user: false,
+          parse: ['everyone'],
+          roles: ['everyone'],
+        },
       };
     } catch (error) {
       logError(error);
