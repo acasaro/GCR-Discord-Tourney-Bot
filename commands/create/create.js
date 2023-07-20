@@ -34,9 +34,10 @@ module.exports = {
         start_date: null,
         start_time: null,
         timestamp: 'Not specified',
-        publish_channel_id: interaction.channel.id,
+        publish_channel_id: interaction.channel.id.toString(),
         lobby_channel_id: response.lobbyChannel.id.toString(),
         status: 'draft',
+        checkin_active: false,
       });
 
       await require('../../messages/TournamentAdminMessage').execute(
@@ -59,7 +60,7 @@ async function creatTournamentChannels(client) {
 
   try {
     const category = await guild.channels.create({
-      name: `🏆 New Tournament`,
+      name: `New Tournament`,
       type: ChannelType.GuildCategory,
     });
 
@@ -73,6 +74,10 @@ async function creatTournamentChannels(client) {
           allow: [PermissionsBitField.Flags.ViewChannel],
         },
         {
+          id: '1118382375852834896',
+          allow: [PermissionsBitField.Flags.ViewChannel],
+        },
+        {
           id: config.guildId,
           deny: [PermissionsBitField.Flags.ViewChannel],
         },
@@ -80,8 +85,8 @@ async function creatTournamentChannels(client) {
     });
 
     const lobbyChannel = await guild.channels.create({
-      name: `🕐 Tournament Lobby`,
-      type: ChannelType.GuildVoice,
+      name: `🏆 Tournament Stage`,
+      type: ChannelType.GuildStageVoice,
       parent: category.id,
       permissionOverwrites: [
         {

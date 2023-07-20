@@ -2,7 +2,9 @@ const { tournamentRankedRoles } = require('./constants/discord');
 const db = require('../backend/db');
 const { logError } = require('./utility-logging');
 const { models } = db;
-const { Tournament, Registration } = models;
+const { Tournament, Registration, Team } = models;
+const { Op } = require('sequelize');
+
 /**
  ***************************************************
  * @name getUserRankedRole
@@ -41,10 +43,43 @@ async function getTournamentByCategoryId(categoryChannelId) {
   try {
     const tournament = await Tournament.findOne({
       where: {
-        parent_channel_id: categoryChannelId,
+        [Op.or]: [
+          {
+            parent_channel_id: {
+              [Op.eq]: categoryChannelId,
+            },
+          },
+          {
+            admin_channel_id: {
+              [Op.eq]: categoryChannelId,
+            },
+          },
+        ],
       },
     });
     return tournament.dataValues;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
+ * @name checkIfExists
+ * @param {*} checkIfExists object
+ * @returns Tournament from db
+ ***************************************************
+ */
+async function checkIfExists(tournamentId, userId) {
+  try {
+    const doesExist = await Registration.findOne({
+      where: {
+        discord_id: userId,
+        tournament_id: tournamentId,
+      },
+    });
+    return doesExist;
   } catch (error) {
     console.log(error);
     return error;
@@ -71,6 +106,60 @@ async function registerTournamentUser(newRegistrationValues) {
       await Registration.create(newRegistrationValues);
       return 'You are successfully checked-in';
     }
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
+ * @name updateRegisteredUser
+ * @param {*} updatedValues object
+ * @returns updates status from registration
+ ***************************************************
+ */
+async function updateRegisteredUser(updatedValues) {
+  try {
+    const userExists = await Registration.findOne({
+      where: {
+        discord_id: updatedValues.discord_id,
+        tournament_id: updatedValues.tournament_id,
+      },
+    });
+    if (!userExists) {
+      return console.log(`User registration doesn't exist`);
+    } else {
+      await Registration.update(updatedValues, {
+        where: {
+          discord_id: updatedValues.discord_id,
+          tournament_id: updatedValues.tournament_id,
+        },
+      });
+      return console.log('User registration successfully updated');
+    }
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
+ * @name updateTeam
+ * @param {*} updatedValues object
+ * @returns updates status from registration
+ ***************************************************
+ */
+async function updateTeam(teamId, updatedValues) {
+  try {
+    await Team.update(updatedValues, {
+      where: {
+        id: teamId,
+      },
+    });
+
+    return console.log('Team  successfully updated');
   } catch (error) {
     console.log(error);
     return error;
@@ -146,6 +235,14 @@ async function deleteTournament(tournamentId) {
       },
       { transaction: t },
     );
+    await Team.destroy(
+      {
+        where: {
+          tournament_id: tournamentId,
+        },
+      },
+      { transaction: t },
+    );
 
     return await t.commit();
   } catch (error) {
@@ -171,24 +268,69 @@ async function getRegisteredUsers(tournamentId) {
       },
     });
 
-    const response = queryRegistration.map(({ dataValues }) => {
-      const {
-        username,
-        tournament_id,
-        discord_id,
-        discord_rank_role_id,
-        discord_rank_role_name,
-      } = dataValues;
-
-      return {
-        username,
-        tournament_id,
-        discord_id,
-        discord_rank_role_id,
-        discord_rank_role_name,
-      };
-    });
+    const response = queryRegistration.map(({ dataValues }) => dataValues);
     return response;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
+ * @name createTournamentTeam
+ * @param {*} newTeamValues object
+ * @returns Tournament from db
+ ***************************************************
+ */
+async function createTournamentTeam(newTeamValues) {
+  try {
+    await Team.create(newTeamValues);
+    return console.log(`${newTeamValues.name} successfully created`);
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
+ * @name getTournamentTeams
+ * @param {*} tournamentId
+ * @returns Array teams matched for tournament
+ ***************************************************
+ */
+async function getTournamentTeams(tournamentId) {
+  try {
+    const queryTeams = await Team.findAll({
+      where: {
+        tournament_id: tournamentId,
+      },
+    });
+
+    const response = queryTeams.map(({ dataValues }) => dataValues);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
+ * @name deleteTournamentTeam
+ * @param {*} tournamentId
+ * @returns console log
+ ***************************************************
+ */
+async function deleteTournamentTeam(teamId) {
+  try {
+    await Team.destroy({
+      where: {
+        id: teamId,
+      },
+    });
+    return console.log(`Successfully deleted team ${teamId}`);
   } catch (error) {
     console.log(error);
     return error;
@@ -216,12 +358,18 @@ async function updateCategoryChannelName(categoryChannel, newTitle) {
 }
 
 module.exports = {
-  updateCategoryChannelName,
-  getRegisteredUsers,
-  updateTournament,
-  deleteRegisteredTournamentUsers,
-  registerTournamentUser,
-  getUserRankedRole,
   getTournamentByCategoryId,
+  getRegisteredUsers,
+  getTournamentTeams,
+  getUserRankedRole,
+  updateCategoryChannelName,
+  updateRegisteredUser,
+  updateTournament,
+  updateTeam,
+  registerTournamentUser,
+  createTournamentTeam,
   deleteTournament,
+  deleteTournamentTeam,
+  deleteRegisteredTournamentUsers,
+  checkIfExists,
 };

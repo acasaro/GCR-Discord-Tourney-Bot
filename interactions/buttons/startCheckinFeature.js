@@ -3,6 +3,7 @@ const { models } = db;
 const { Tournament } = models;
 const { ActionRowBuilder, ButtonStyle, ButtonBuilder } = require('discord.js');
 const { CheckinEmbedMessage } = require('../../embeds/checkinEmbed');
+const { AdminEmbed } = require('../../embeds/adminEmbed-alt');
 
 module.exports = {
   id: 'start_tourney_checkin',
@@ -15,9 +16,9 @@ module.exports = {
         },
       });
 
-      // Fetch tournament lobby channel
-      const { lobby_channel_id } = tournament.dataValues;
+      const { lobby_channel_id, admin_message_id } = tournament.dataValues;
 
+      // Fetch tournament lobby channel
       const tournamentLobbyChannel =
         interaction.client.channels.cache.get(lobby_channel_id);
 
@@ -29,7 +30,10 @@ module.exports = {
       // If checkin_message_id doesn't exisit add it
       if (tournament.checkin_message_id !== checkinMessage.id.toString()) {
         await Tournament.update(
-          { checkin_message_id: checkinMessage.id.toString() },
+          {
+            checkin_message_id: checkinMessage.id.toString(),
+            checkin_active: true,
+          },
           {
             where: {
               id: tournament.id,
@@ -38,13 +42,27 @@ module.exports = {
         );
       }
 
+      // Edit Admin message with updated values
+      const adminMessage = await interaction.channel.messages.fetch(
+        admin_message_id,
+      );
+
+      const updatedAdminMessage = await AdminEmbed({
+        tournament: {
+          ...tournament.dataValues,
+          checkin_active: true,
+        },
+      });
+
+      await adminMessage.edit(updatedAdminMessage);
+
       await interaction.reply({
         content: `Check-in has now started \n\nParticipants will click the "Check-in" button in #tournament-lobby channel to confirm they're here and ready to play! Those who do not will not be in the tournament when the Admin clicks the "End" button.`,
         components: [row({ disableButtons: false })],
       });
     } catch (error) {
       await interaction.reply({
-        constent: `Something went wrong \n Error: ${JSON.stringify(error)}`,
+        content: `Something went wrong \n Error: ${JSON.stringify(error)}`,
       });
     }
   },

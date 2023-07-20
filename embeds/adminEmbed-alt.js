@@ -7,10 +7,18 @@ module.exports = {
   async AdminEmbed(props) {
     const { tournament } = props;
     try {
-      const { title, description, organizer_id, timestamp, game_mode, status } =
-        tournament;
+      const {
+        title,
+        description,
+        organizer_id,
+        timestamp,
+        game_mode,
+        publish_channel_id,
+        status,
+        checkin_active,
+        invited_roles,
+      } = tournament;
 
-      console.log(status);
       const embed = new EmbedBuilder()
         .setTitle(`GCR Tournament Configuration `)
         .setColor(0x00b9ff)
@@ -19,14 +27,16 @@ module.exports = {
         .setFooter(footer)
         .addFields({
           name: '\u200B',
-          value: `📝 Name: **${title}** \n📆 When: **${timestamp}** \n📝 Game Mode: **${game_mode}** \n \u200B \n📝 Info: \n*${description}* \n \u200B`,
+          value: `📝 Name: **${title}** \n📆 When: **${timestamp}** \n📝 Game Mode: **${game_mode}** \n👥 Who: **${
+            invited_roles ? invited_roles : 'Not Specified'
+          }**\n \u200B \n📝 Info: \n*${description}* \n \u200B`,
         })
 
         .addFields(
           // { name: '\u200B', value: '\u200B' },
           {
             name: '**BUTTONS**',
-            value: `🏁 Start tournament \n✅ Start check in feature\n📣 Posts tourney to <#${channels.tourney_bot_test}> - </move:${commands.move}> \n⛔ Removes posted announcement \n✏️ Edits tournament details \n🎮 Edits tournament game mode \n👥 Attaches roles to the WHO tournament message \n🗑️ Deletes the tournament `,
+            value: `🏁 Start tournament \n✅ Start check in feature\n📣 Posts tourney to <#${publish_channel_id}> \n⛔ Removes posted announcement \n✏️ Edits tournament details \n🎮 Edits tournament game mode \n👥 Invite roles to tournament \n🗑️ Deletes the tournament `,
           },
         );
 
@@ -34,7 +44,7 @@ module.exports = {
         start({ isDisabled: false }),
         editDetails(),
         editGameMode(),
-        startCheckin({ isDisabled: true }),
+        startCheckin({ isDisabled: checkin_active }),
         editStartDate(),
       );
       const row2 = new ActionRowBuilder().addComponents(
@@ -48,6 +58,9 @@ module.exports = {
         embeds: [embed],
         components: [row1, row2],
         ephemeral: false,
+        allowed_mentions: {
+          parse: [],
+        },
       };
     } catch (error) {
       console.log(error);
@@ -88,13 +101,14 @@ const unpublish = ({ isDisabled = false, ...props }) => {
   );
 };
 
-const startCheckin = () => {
+const startCheckin = ({ isDisabled = false, ...props }) => {
   return (
     new ButtonBuilder()
       .setStyle(ButtonStyle.Primary)
       .setEmoji('✅')
       // .setLabel(`Checkin`)
       .setCustomId('start_tourney_checkin')
+      .setDisabled(isDisabled || false)
   );
 };
 
