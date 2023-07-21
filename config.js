@@ -1,19 +1,9 @@
-require("dotenv").config();
+require('dotenv').config();
 
 const config = {
-  token: "Discord Application Token",
-  clientId: "Discord applications client id",
+  token: 'Discord Application Token',
+  clientId: 'Discord applications client id',
   guildId: "Your development server's id",
-  // guild: "SERVER ID",
-  // liveEventStageId: "Live Event Channel ID",
-  // HUBtxtChannelID: "leaveBlank",
-  // HUBvcChannelID: "HUB CHANNEL ID",
-  // DefaultRoleID: "if use @everyone, just put the server id in here. ",
-  // categoryID: "CATEGORY",
-  // status: "",
-  // enable_slash: true,
-  // prefix: "]",
-  // owners: [""],
 };
 //use env
 config.token = process.env.TOKEN;
@@ -25,8 +15,9 @@ config.HUBvcChannelID = process.env.HUB_ID;
 config.DefaultRoleID = process.env.ROLE_ID;
 config.categoryID = process.env.CATEGORY_ID;
 config.prefix = process.env.PREFIX;
+config.testGuildId = process.env.TEST_GUILD_ID;
 config.owners = process.env.OWNERS
-  ? process.env.OWNERS.split(",")
-  : null || [""];
+  ? process.env.OWNERS.split(',')
+  : null || [''];
 
 module.exports = { config };

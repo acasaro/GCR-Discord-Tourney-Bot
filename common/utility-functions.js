@@ -2,8 +2,39 @@ const { tournamentRankedRoles } = require('./constants/discord');
 const db = require('../backend/db');
 const { logError } = require('./utility-logging');
 const { models } = db;
-const { Tournament, Registration, Team } = models;
+const { Tournament, Registration, Team, Config } = models;
 const { Op } = require('sequelize');
+
+/**
+ ***************************************************
+ * @name getBotConfig
+ * @param {*} guildId String
+ * @returns Global configurations from DB
+ ***************************************************
+ */
+async function getBotConfig(guildId) {
+  try {
+    const doesExist = await Config.findOne({
+      where: {
+        guild_id: guildId,
+      },
+    });
+
+    if (!doesExist) {
+      // Create a bot config
+      const newConfig = await Config.create({
+        guild_id: guildId,
+        bot_admin_role_id: null,
+        default_publish_channel_id: null,
+      });
+      return newConfig.dataValues;
+    }
+    return doesExist.dataValues;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
 
 /**
  ***************************************************
@@ -372,4 +403,5 @@ module.exports = {
   deleteTournamentTeam,
   deleteRegisteredTournamentUsers,
   checkIfExists,
+  getBotConfig,
 };

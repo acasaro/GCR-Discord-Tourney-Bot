@@ -33,3 +33,5 @@ undo specific migration:
 You can run `npx sequelize-cli db:migrate` (with no migrations) to test out and see a database file generate.
 
 If migrations/models are available, but no database is currently within `/backend/db`, you can go ahead and run the above command to generate a database file.
+
+npx sequelize-cli model:generate --name config --attributes guild_id:string,bot_admin_role_id:string,default_publish_channel_id:string
