@@ -88,11 +88,7 @@ async function creatTournamentChannels(interaction) {
       parent: category.id,
       permissionOverwrites: [
         {
-          id: '1118501937768312912',
-          allow: [PermissionsBitField.Flags.ViewChannel],
-        },
-        {
-          id: '1118382375852834896',
+          id: botConfig.bot_admin_role_id,
           allow: [PermissionsBitField.Flags.ViewChannel],
         },
         {
