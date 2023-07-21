@@ -5,8 +5,8 @@ const { logdb } = require('../../common/utility-logging');
 // configurations for db
 module.exports = {
   development: {
-    username: 'root',
-    password: 'root',
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
     database: 'database_development',
     host: '127.0.0.1',
     storage: path.resolve(__dirname, '../database.sqlite'),
