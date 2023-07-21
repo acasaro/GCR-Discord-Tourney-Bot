@@ -4,6 +4,9 @@ const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { config } = require('./config');
 const { token } = config;
 const { logDiscord } = require('./common/utility-logging');
+const keepAlive = require('./server/server');
+
+const currentDirectory = process.cwd();
 
 const bot = new Client({
   intents: [
@@ -96,3 +99,4 @@ for (const module of selectMenus) {
 }
 
 bot.login(token);
+keepAlive();
