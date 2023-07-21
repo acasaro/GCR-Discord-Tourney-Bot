@@ -8,7 +8,7 @@ const config = {
 //use env
 config.token = process.env.TOKEN;
 config.clientId = process.env.CLIENT_ID;
-config.guildId = process.env.GUILD_ID;
+config.guildId = process.env.TEST_GUILD_ID;
 config.liveEventStageId = process.env.SERVER_ID;
 config.guild = process.env.SERVER_ID;
 config.HUBvcChannelID = process.env.HUB_ID;

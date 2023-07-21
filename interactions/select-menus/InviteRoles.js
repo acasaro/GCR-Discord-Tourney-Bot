@@ -63,7 +63,7 @@ module.exports = {
       }, timeoutDuration);
     } catch (error) {
       await interaction.editReply({
-        content: `There was an issue updating game mode. \nError catch: \n\`\`\` ${error}\n\`\`\``,
+        content: `There was an issue inviting roles. \nError catch: \n\`\`\` ${error}\n\`\`\``,
         components: [],
       });
       console.log(error);

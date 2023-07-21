@@ -38,6 +38,29 @@ async function getBotConfig(guildId) {
 
 /**
  ***************************************************
+ * @name updateBotConfig
+ * @param {*} guildId String
+ * @param {*} updatedValues String
+ * @returns Global configurations from DB
+ ***************************************************
+ */
+async function updateBotConfig(guildId, updatedValues) {
+  try {
+    await Config.update(updatedValues, {
+      where: {
+        guild_id: guildId,
+      },
+    });
+
+    return console.log('Config  successfully updated');
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
  * @name getUserRankedRole
  * @param {*} member
  * @returns Output: { id: 1, name: 'Champion' }
@@ -389,10 +412,12 @@ async function updateCategoryChannelName(categoryChannel, newTitle) {
 }
 
 module.exports = {
+  getBotConfig,
   getTournamentByCategoryId,
   getRegisteredUsers,
   getTournamentTeams,
   getUserRankedRole,
+  updateBotConfig,
   updateCategoryChannelName,
   updateRegisteredUser,
   updateTournament,
@@ -403,5 +428,4 @@ module.exports = {
   deleteTournamentTeam,
   deleteRegisteredTournamentUsers,
   checkIfExists,
-  getBotConfig,
 };
