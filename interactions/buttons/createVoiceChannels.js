@@ -18,6 +18,7 @@ module.exports = {
   async execute(interaction) {
     try {
       const { guild, channel } = interaction;
+      const guildId = interaction.guild.id;
       const parentChannelId = channel.parentId;
       const tournament = await getTournamentByCategoryId(parentChannelId);
       if (!tournament) {
@@ -43,6 +44,20 @@ module.exports = {
               name: teamName,
               type: ChannelType.GuildVoice,
               parent: tournament.parent_channel_id,
+              permissionOverwrites: [
+                {
+                  id: guildId,
+                  allow: [PermissionsBitField.Flags.ViewChannel],
+                },
+                {
+                  id: guildId,
+                  allow: [PermissionsBitField.Flags.Connect],
+                },
+                {
+                  id: guildId,
+                  allow: [PermissionsBitField.Flags.Speak],
+                },
+              ],
             });
 
             // Update DB Team
