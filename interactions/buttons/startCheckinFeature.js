@@ -88,7 +88,7 @@ async function createCheckinChannel(interaction) {
     const guild = await client.guilds.cache.get(guildId);
 
     const newCheckinChannel = await guild.channels.create({
-      name: `checkin`,
+      name: `✅ Check-in`,
       type: ChannelType.GuildText,
       parent: channel.parentId,
       permissionOverwrites: [

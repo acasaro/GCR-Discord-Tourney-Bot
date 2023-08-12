@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       status: DataTypes.STRING,
       lobby_channel_id: DataTypes.STRING,
       checkin_channel_id: DataTypes.STRING,
+      teams_channel_id: DataTypes.STRING,
       admin_message_id: DataTypes.STRING,
       publish_message_id: DataTypes.STRING,
       checkin_message_id: DataTypes.STRING,

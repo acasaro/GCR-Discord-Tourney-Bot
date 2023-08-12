@@ -2,6 +2,7 @@ const {
   getTournamentByCategoryId,
   deleteTournamentTeam,
   getTournamentTeams,
+  updateTournament,
 } = require('../../common/utility-functions');
 
 module.exports = {
@@ -10,6 +11,7 @@ module.exports = {
     const { guild, channel } = interaction;
     const parentChannelId = channel.parentId;
     const tournament = await getTournamentByCategoryId(parentChannelId);
+    const { teams_channel_id } = tournament;
 
     const teams = await getTournamentTeams(tournament.id);
 
@@ -25,8 +27,22 @@ module.exports = {
     });
 
     await Promise.all([...teamsToDelete, ...channelsToDelete]);
-    await interaction.channel.delete();
 
+    // Fetch Teams channel and delete it
+    const teamsChannel =
+      interaction.client.channels.cache.get(teams_channel_id);
+
+    if (teamsChannel) {
+      await teamsChannel.delete();
+    }
+
+    // Update Tournament with teams_channel_id
+    await updateTournament(tournament.id, {
+      teams_channel_id: null,
+    });
+
+    // Delete team manager embed message
+    await interaction.message.delete();
     return await interaction.deferUpdate();
   },
 };

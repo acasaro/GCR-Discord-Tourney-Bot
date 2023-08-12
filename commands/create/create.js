@@ -46,6 +46,7 @@ module.exports = {
           publish_channel_id: interaction.channel.id.toString(),
           lobby_channel_id: response.lobbyChannel.id.toString(),
           checkin_channel_id: null,
+          teams_channel_id: null,
           status: 'draft',
           checkin_active: false,
         }).catch(error => console.log(error));

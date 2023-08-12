@@ -30,6 +30,9 @@ module.exports = {
       publish_channel_id: {
         type: Sequelize.STRING,
       },
+      teams_channel_id: {
+        type: Sequelize.STRING,
+      },
       admin_channel_id: {
         type: Sequelize.STRING,
       },
