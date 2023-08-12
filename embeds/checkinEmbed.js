@@ -12,7 +12,7 @@ const CheckinEmbedMessage = ({ checkinActive, ...props }) => {
     .setColor(0x00b9ff)
     .setDescription(
       checkinActive
-        ? `Please click on the check-in button below to confirm your participation in the tournament. \n 
+        ? `@everyone Please click on the check-in button below to confirm your participation in the tournament. \n 
     Otherwise you will not be matched to a team once check-in has ended!`
         : `The Check-in period has been ended by the tournament admin. Teams will be made shortly. `,
     )
@@ -28,12 +28,28 @@ const CheckinEmbedMessage = ({ checkinActive, ...props }) => {
       .setDisabled(!checkinActive);
   };
 
-  const row = new ActionRowBuilder().addComponents(checkinButton());
+  const checkoutButton = () => {
+    return new ButtonBuilder()
+      .setStyle(checkinActive ? ButtonStyle.Danger : ButtonStyle.Danger)
+      .setLabel(`Check-out`)
+      .setCustomId('checkout_user')
+      .setDisabled(!checkinActive);
+  };
+
+  const row = new ActionRowBuilder().addComponents(
+    checkinButton(),
+    checkoutButton(),
+  );
 
   return {
     // content: ``,
     embeds: [checkinEmbed],
     components: [row],
+    allowed_mentions: {
+      replied_user: false,
+      parse: ['everyone'],
+      roles: ['everyone'],
+    },
   };
 };
 

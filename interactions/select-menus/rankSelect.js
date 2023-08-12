@@ -4,6 +4,8 @@ const {
   updateTournament,
   registerTournamentUser,
   checkIfExists,
+  checkIfRegistered,
+  updateRegisteredUser,
 } = require('../../common/utility-functions');
 
 const timeoutDuration = 5000;
@@ -34,13 +36,27 @@ module.exports = {
           status: 'checked-in',
         };
 
-        // Add User to Registrations Table
-        const checkinResponse = await registerTournamentUser(newRegistration);
+        const isCheckedIn = await checkIfRegistered(
+          member.user.id.toString(),
+          tournament.id,
+        );
+        let checkinResponse = '';
+        if (isCheckedIn) {
+          checkinResponse = await updateRegisteredUser({
+            tournament_id: tournament.id,
+            discord_id: member.user.id.toString(),
+            rank_role_name: userRank[0].name,
+            rank_value: parseInt(userRank[0].value),
+            emoji_id: userRank[0].emoji,
+          });
+        } else {
+          // Add User to Registrations Table
+          checkinResponse = await registerTournamentUser(newRegistration);
+        }
         await interaction.editReply({
           content: checkinResponse,
           components: [],
         });
-
         // Alert Admin Channel of Checkin
         const emoji = client.emojis.cache.get(userRank[0].emoji);
         // await interaction.editReply({

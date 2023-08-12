@@ -23,36 +23,37 @@ module.exports = {
         },
       });
 
-      const { lobby_channel_id, admin_message_id } = tournament.dataValues;
-
-      await createCheckinChannel(interaction).then(async response => {
-        console.log(response.newCheckinChannel.id);
-        // Fetch tournament checkin channel
-        const tournamentCheckinChannel = interaction.client.channels.cache.get(
-          response.newCheckinChannel.id,
-        );
-        // Send checkin message to chat inside tournament lobby.
-        const checkinMessage = await tournamentCheckinChannel.send(
-          CheckinEmbedMessage({ checkinActive: true }),
-        );
-
-        // If checkin_message_id doesn't exisit add it
-        if (tournament.checkin_message_id !== checkinMessage.id.toString()) {
-          await Tournament.update(
-            {
-              checkin_message_id: checkinMessage.id.toString(),
-              checkin_channel_id: response.newCheckinChannel.id,
-              checkin_active: true,
-            },
-            {
-              where: {
-                id: tournament.id,
-              },
-            },
+      const { lobby_channel_id, admin_message_id, checkin_channel_id } =
+        tournament.dataValues;
+      if (!checkin_channel_id) {
+        await createCheckinChannel(interaction).then(async response => {
+          // Fetch tournament checkin channel
+          const tournamentCheckinChannel =
+            interaction.client.channels.cache.get(
+              response.newCheckinChannel.id,
+            );
+          // Send checkin message to chat inside tournament lobby.
+          const checkinMessage = await tournamentCheckinChannel.send(
+            CheckinEmbedMessage({ checkinActive: true }),
           );
-        }
-      });
 
+          // If checkin_message_id doesn't exisit add it
+          if (tournament.checkin_message_id !== checkinMessage.id.toString()) {
+            await Tournament.update(
+              {
+                checkin_message_id: checkinMessage.id.toString(),
+                checkin_channel_id: response.newCheckinChannel.id,
+                checkin_active: true,
+              },
+              {
+                where: {
+                  id: tournament.id,
+                },
+              },
+            );
+          }
+        });
+      }
       // Edit Admin message with updated values
       const adminMessage = await interaction.channel.messages.fetch(
         admin_message_id,

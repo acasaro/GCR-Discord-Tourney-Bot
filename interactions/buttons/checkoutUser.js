@@ -1,10 +1,11 @@
 const {
   checkIfExists,
   getTournamentByCategoryId,
+  deleteRegisteredTournamentUser,
 } = require('../../common/utility-functions');
 
 module.exports = {
-  id: 'checkin_user',
+  id: 'checkout_user',
   async execute(interaction) {
     const { channel, member } = interaction;
     const parentChannelId = channel.parentId;
@@ -15,18 +16,22 @@ module.exports = {
         tournament.id,
         member.user.id.toString(),
       );
-
-      // if (isRegistered) {
-      //   await interaction.reply({
-      //     content: `You're already checked-in to this tournament`,
-      //     ephemeral: true,
-      //   });
-      // } else {
-      await require('../../select-menus/RankSelect').execute(interaction);
-      // }
+      let content = `You've been checked-out of tournament`;
+      if (!isRegistered) {
+        content = `You are not currently checked-in to tournament`;
+      } else {
+        await deleteRegisteredTournamentUser(
+          tournament.id,
+          member.user.id.toString(),
+        );
+      }
+      await interaction.reply({
+        content,
+        ephemeral: true,
+      });
     } catch (error) {
       await interaction.reply({
-        content: 'There was an issue checking you into this tournament',
+        content: 'There was an issue please try again',
         ephemeral: true,
       });
       console.log(error);
