@@ -30,10 +30,16 @@ module.exports = {
       publish_channel_id: {
         type: Sequelize.STRING,
       },
+      teams_channel_id: {
+        type: Sequelize.STRING,
+      },
       admin_channel_id: {
         type: Sequelize.STRING,
       },
       lobby_channel_id: {
+        type: Sequelize.STRING,
+      },
+      checkin_channel_id: {
         type: Sequelize.STRING,
       },
       checkin_message_id: {
@@ -49,6 +55,9 @@ module.exports = {
         type: Sequelize.STRING,
       },
       publish_message_id: {
+        type: Sequelize.STRING,
+      },
+      teams_created_message_id: {
         type: Sequelize.STRING,
       },
       status: {

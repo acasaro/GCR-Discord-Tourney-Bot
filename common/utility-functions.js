@@ -155,10 +155,38 @@ async function registerTournamentUser(newRegistrationValues) {
       },
     });
     if (alreadyCheckedIn) {
-      return `You're already checked-in to this tournament`;
+      await Registration.update(newRegistrationValues);
+      return `Updated your checked-in rank for this tournament`;
     } else {
       await Registration.create(newRegistrationValues);
       return 'You are successfully checked-in';
+    }
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+/**
+ ***************************************************
+ * @name checkIfRegistered
+ * @param {*} discordId object
+ * @param {*} tournamentId object
+ * @returns Boolean if registered
+ ***************************************************
+ */
+async function checkIfRegistered(discordId, tournamentId) {
+  try {
+    const alreadyCheckedIn = await Registration.findOne({
+      where: {
+        discord_id: discordId,
+        tournament_id: tournamentId,
+      },
+    });
+    if (alreadyCheckedIn) {
+      return true;
+    } else {
+      return false;
     }
   } catch (error) {
     console.log(error);
@@ -182,7 +210,8 @@ async function updateRegisteredUser(updatedValues) {
       },
     });
     if (!userExists) {
-      return console.log(`User registration doesn't exist`);
+      console.log(`User registration doesn't exist`);
+      return `User registration doesn't exist`;
     } else {
       await Registration.update(updatedValues, {
         where: {
@@ -190,7 +219,9 @@ async function updateRegisteredUser(updatedValues) {
           tournament_id: updatedValues.tournament_id,
         },
       });
-      return console.log('User registration successfully updated');
+      console.log('User registration successfully updated');
+
+      return `User registration successfully updated to: ${updatedValues.rank_role_name}`;
     }
   } catch (error) {
     console.log(error);
@@ -232,6 +263,27 @@ async function deleteRegisteredTournamentUsers(tournamentId) {
     return await Registration.destroy({
       where: {
         tournament_id: tournamentId,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+/**
+ ***************************************************
+ * @name deleteRegisteredTournamentUser
+ * @param {*} tournamentId
+ * @param {*} discordId
+ * @returns Promise
+ ***************************************************
+ */
+async function deleteRegisteredTournamentUser(tournamentId, discordId) {
+  try {
+    return await Registration.destroy({
+      where: {
+        tournament_id: tournamentId,
+        discord_id: discordId,
       },
     });
   } catch (error) {
@@ -427,5 +479,7 @@ module.exports = {
   deleteTournament,
   deleteTournamentTeam,
   deleteRegisteredTournamentUsers,
+  deleteRegisteredTournamentUser,
   checkIfExists,
+  checkIfRegistered,
 };
