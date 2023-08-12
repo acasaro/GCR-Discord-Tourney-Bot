@@ -1,9 +1,16 @@
 const db = require('../../backend/db');
 const { models } = db;
 const { Tournament } = models;
-const { ActionRowBuilder, ButtonStyle, ButtonBuilder } = require('discord.js');
+const {
+  ActionRowBuilder,
+  ButtonStyle,
+  ButtonBuilder,
+  ChannelType,
+  PermissionsBitField,
+} = require('discord.js');
 const { CheckinEmbedMessage } = require('../../embeds/checkinEmbed');
 const { AdminEmbed } = require('../../embeds/adminEmbed-alt');
+const { getBotConfig } = require('../../common/utility-functions');
 
 module.exports = {
   id: 'start_tourney_checkin',
@@ -16,32 +23,37 @@ module.exports = {
         },
       });
 
-      const { lobby_channel_id, admin_message_id } = tournament.dataValues;
+      const { lobby_channel_id, admin_message_id, checkin_channel_id } =
+        tournament.dataValues;
+      if (!checkin_channel_id) {
+        await createCheckinChannel(interaction).then(async response => {
+          // Fetch tournament checkin channel
+          const tournamentCheckinChannel =
+            interaction.client.channels.cache.get(
+              response.newCheckinChannel.id,
+            );
+          // Send checkin message to chat inside tournament lobby.
+          const checkinMessage = await tournamentCheckinChannel.send(
+            CheckinEmbedMessage({ checkinActive: true }),
+          );
 
-      // Fetch tournament lobby channel
-      const tournamentLobbyChannel =
-        interaction.client.channels.cache.get(lobby_channel_id);
-
-      // Send checkin message to chat inside tournament lobby.
-      const checkinMessage = await tournamentLobbyChannel.send(
-        CheckinEmbedMessage({ checkinActive: true }),
-      );
-
-      // If checkin_message_id doesn't exisit add it
-      if (tournament.checkin_message_id !== checkinMessage.id.toString()) {
-        await Tournament.update(
-          {
-            checkin_message_id: checkinMessage.id.toString(),
-            checkin_active: true,
-          },
-          {
-            where: {
-              id: tournament.id,
-            },
-          },
-        );
+          // If checkin_message_id doesn't exisit add it
+          if (tournament.checkin_message_id !== checkinMessage.id.toString()) {
+            await Tournament.update(
+              {
+                checkin_message_id: checkinMessage.id.toString(),
+                checkin_channel_id: response.newCheckinChannel.id,
+                checkin_active: true,
+              },
+              {
+                where: {
+                  id: tournament.id,
+                },
+              },
+            );
+          }
+        });
       }
-
       // Edit Admin message with updated values
       const adminMessage = await interaction.channel.messages.fetch(
         admin_message_id,
@@ -67,6 +79,34 @@ module.exports = {
     }
   },
 };
+
+async function createCheckinChannel(interaction) {
+  const { client, channel } = interaction;
+  const guildId = interaction.guild.id;
+
+  try {
+    const guild = await client.guilds.cache.get(guildId);
+
+    const newCheckinChannel = await guild.channels.create({
+      name: `checkin`,
+      type: ChannelType.GuildText,
+      parent: channel.parentId,
+      permissionOverwrites: [
+        {
+          id: guildId,
+          allow: [PermissionsBitField.Flags.ViewChannel],
+        },
+        {
+          id: guildId,
+          deny: [PermissionsBitField.Flags.SendMessages],
+        },
+      ],
+    });
+    return { newCheckinChannel };
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 // Components
 // ----------------------------------------------------------------------

@@ -45,6 +45,7 @@ module.exports = {
           timestamp: 'Not specified',
           publish_channel_id: interaction.channel.id.toString(),
           lobby_channel_id: response.lobbyChannel.id.toString(),
+          checkin_channel_id: null,
           status: 'draft',
           checkin_active: false,
         }).catch(error => console.log(error));
@@ -80,6 +81,20 @@ async function creatTournamentChannels(interaction) {
     const category = await guild.channels.create({
       name: `New Tournament`,
       type: ChannelType.GuildCategory,
+      permissionOverwrites: [
+        {
+          id: guildId,
+          allow: [PermissionsBitField.Flags.Speak],
+        },
+        {
+          id: guildId,
+          allow: [PermissionsBitField.Flags.ViewChannel],
+        },
+        {
+          id: guildId,
+          allow: [PermissionsBitField.Flags.Connect],
+        },
+      ],
     });
 
     const newAdminChannel = await guild.channels.create({
