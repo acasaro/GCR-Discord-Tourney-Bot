@@ -2,6 +2,7 @@ const {
   ChannelType,
   ThreadManager,
   ThreadAutoArchiveDuration,
+  PermissionsBitField,
 } = require('discord.js');
 const { teamSizes } = require('../../common/constants/tournaments');
 const {
