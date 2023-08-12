@@ -28,6 +28,8 @@ module.exports = {
 
       const parentChannelId = channel.parentId;
       const tournament = await getTournamentByCategoryId(parentChannelId);
+
+      const { teams_created_message_id, lobby_channel_id } = tournament;
       const players = await getRegisteredUsers(tournament.id);
       const teamSize = teamSizes[tournament.game_mode];
       const teamCount = Math.floor(players.length / teamSize);
@@ -66,7 +68,7 @@ module.exports = {
 
         let teams = [];
 
-        console.log({ remainingPlayerCount, remainingPlayers, sortedMembers });
+        // console.log({ remainingPlayerCount, remainingPlayers, sortedMembers });
         if (teamSize === 1) {
           teams = players.map((player, index) => ({
             teamName: `Team #${index + 1}`,
@@ -139,6 +141,25 @@ module.exports = {
         interaction.editReply(
           `Teams created and listed in a new channel: ${teamChannel}`,
         );
+
+        // Fetch tournament stage channel
+        const tournamentStageChannel =
+          interaction.client.channels.cache.get(lobby_channel_id);
+
+        // Send checkin message to chat inside tournament lobby.
+        const teamsCreatedMessage = await tournamentStageChannel.send(
+          `Teams are created! You can view them here: ${teamChannel}`,
+        );
+
+        // If checkin_message_id doesn't exisit add it
+        if (
+          tournament.teamsCreatedMessage !== teamsCreatedMessage.id.toString()
+        ) {
+          await updateTournament(tournament.id, {
+            teams_created_message_id: teamsCreatedMessage.id.toString(),
+          });
+        }
+
         teams.forEach(async team => {
           // console.log(team);
           await createTournamentTeam({

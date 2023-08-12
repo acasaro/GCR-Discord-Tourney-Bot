@@ -57,6 +57,9 @@ module.exports = {
       publish_message_id: {
         type: Sequelize.STRING,
       },
+      teams_created_message_id: {
+        type: Sequelize.STRING,
+      },
       status: {
         type: Sequelize.STRING,
       },
