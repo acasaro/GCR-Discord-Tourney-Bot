@@ -53,6 +53,7 @@ module.exports = {
 
       await updateTournament(tournament.id, {
         checkin_message_id: null,
+        checkin_channel_id: null,
         checkin_active: false,
       });
 
