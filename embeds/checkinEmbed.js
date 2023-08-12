@@ -30,10 +30,9 @@ const CheckinEmbedMessage = ({ checkinActive, ...props }) => {
 
   const checkoutButton = () => {
     return new ButtonBuilder()
-      .setStyle(checkinActive ? ButtonStyle.Danger : ButtonStyle.Danger)
+      .setStyle(ButtonStyle.Danger)
       .setLabel(`Check-out`)
-      .setCustomId('checkout_user')
-      .setDisabled(!checkinActive);
+      .setCustomId('checkout_user');
   };
 
   const row = new ActionRowBuilder().addComponents(
