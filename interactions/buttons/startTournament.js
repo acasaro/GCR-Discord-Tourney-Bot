@@ -110,7 +110,7 @@ module.exports = {
 
         // Create Teams Thread to list all teams
         const teamChannel = await guild.channels.create({
-          name: 'Teams',
+          name: '👥 Teams',
           type: ChannelType.GuildText,
           parent: channel.parentId,
           permissionOverwrites: [
@@ -125,6 +125,10 @@ module.exports = {
           ],
         });
 
+        await teamChannel.permissionOverwrites.create(
+          channel.guild.roles.everyone,
+          { ViewChannel: true, SendMessages: false },
+        );
         // Update Tournament with teams_channel_id
         await updateTournament(tournament.id, {
           teams_channel_id: teamChannel.id,

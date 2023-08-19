@@ -91,6 +91,7 @@ async function createCheckinChannel(interaction) {
       name: `✅ Check-in`,
       type: ChannelType.GuildText,
       parent: channel.parentId,
+      position: 12,
       permissionOverwrites: [
         {
           id: guildId,
@@ -102,6 +103,10 @@ async function createCheckinChannel(interaction) {
         },
       ],
     });
+    await newCheckinChannel.permissionOverwrites.create(
+      channel.guild.roles.everyone,
+      { ViewChannel: true, SendMessages: false },
+    );
     return { newCheckinChannel };
   } catch (error) {
     console.log(error);
