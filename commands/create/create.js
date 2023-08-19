@@ -33,18 +33,34 @@ module.exports = {
           ephemeral: true,
         });
       } else {
+        const {
+          tournamentLiveStage,
+          tournamentAdminChannel,
+          tournamentCategoryChannel,
+        } = response;
+        console.log(tournamentAdminChannel.guild.roles);
+        await tournamentCategoryChannel.permissionOverwrites.create(
+          tournamentCategoryChannel.guild.roles.everyone,
+          { ViewChannel: true, SendMessages: true, Connect: true, Speak: true },
+        );
+        await tournamentLiveStage.permissionOverwrites.create(
+          tournamentLiveStage.guild.roles.everyone,
+          { ViewChannel: true, SendMessages: true, Connect: true, Speak: true },
+        );
+
         const tournament = await Tournament.create({
           title: 'New Tournament',
           description: `It's time for a new tournament! If you want to participate gather in the tournament lobby PROMPTLY at the above time. Check-in will begin exactly at tournament start time and will close 5 minutes after. Don't be late!`,
           game_mode: '2v2',
           organizer_id: interaction.member.user.id.toString(),
-          admin_channel_id: response.newAdminChannel.id.toString(),
-          parent_channel_id: response.newAdminChannel.parentId.toString(),
+          admin_channel_id: response.tournamentAdminChannel.id.toString(),
+          parent_channel_id:
+            response.tournamentAdminChannel.parentId.toString(),
           start_date: null,
           start_time: null,
           timestamp: 'Not specified',
           publish_channel_id: interaction.channel.id.toString(),
-          lobby_channel_id: response.lobbyChannel.id.toString(),
+          lobby_channel_id: response.tournamentLiveStage.id.toString(),
           teams_created_message_id: null,
           checkin_channel_id: null,
           teams_channel_id: null,
@@ -54,11 +70,11 @@ module.exports = {
 
         await require('../../messages/TournamentAdminMessage').execute(
           tournament,
-          response.newAdminChannel,
+          response.tournamentAdminChannel,
         );
 
         await interaction.editReply({
-          content: `I've successfully created: **New Tournament**\nTo customize further and open registration, head to: <#${response.newAdminChannel?.id}>`,
+          content: `I've successfully created: **New Tournament**\nTo customize further and open registration, head to: <#${response.tournamentAdminChannel?.id}>`,
           components: [],
           embeds: [],
           ephemeral: true,
@@ -80,29 +96,19 @@ async function creatTournamentChannels(interaction) {
       return 'MISSING_BOT_ADMIN';
     }
 
-    const category = await guild.channels.create({
+    const tournamentCategoryChannel = await guild.channels.create({
       name: `New Tournament`,
       type: ChannelType.GuildCategory,
-      permissionOverwrites: [
-        {
-          id: guildId,
-          allow: [PermissionsBitField.Flags.Speak],
-        },
-        {
-          id: guildId,
-          allow: [PermissionsBitField.Flags.ViewChannel],
-        },
-        {
-          id: guildId,
-          allow: [PermissionsBitField.Flags.Connect],
-        },
-      ],
+      guild_id: guildId,
+      parent_channel_id: null,
+      position: 0,
+      permissionOverwrites: [],
     });
 
-    const newAdminChannel = await guild.channels.create({
+    const tournamentAdminChannel = await guild.channels.create({
       name: `admin`,
       type: ChannelType.GuildText,
-      parent: category.id,
+      parent: tournamentCategoryChannel.id,
       permissionOverwrites: [
         {
           id: botConfig.bot_admin_role_id,
@@ -115,28 +121,42 @@ async function creatTournamentChannels(interaction) {
       ],
     });
 
-    const lobbyChannel = await guild.channels.create({
+    const tournamentLiveStage = await guild.channels.create({
       name: `🏆 Tournament Stage`,
       type: ChannelType.GuildStageVoice,
-      parent: category.id,
-      permissionOverwrites: [
-        {
-          id: guildId,
-          allow: [PermissionsBitField.Flags.ViewChannel],
-        },
-        {
-          id: guildId,
-          allow: [PermissionsBitField.Flags.Connect],
-        },
-        {
-          id: guildId,
-          allow: [PermissionsBitField.Flags.Speak],
-        },
-      ],
+      parent: tournamentCategoryChannel.id,
+      // permissionOverwrites: [
+      //   {
+      //     id: guildId,
+      //     allow: [PermissionsBitField.Flags.ViewChannel],
+      //   },
+      //   {
+      //     id: guildId,
+      //     allow: [PermissionsBitField.Flags.Connect],
+      //   },
+      //   {
+      //     id: guildId,
+      //     allow: [PermissionsBitField.Flags.Speak],
+      //   },
+
+      //   {
+      //     id: guildId,
+      //     allow: [PermissionsBitField.Flags.ReadMessageHistory],
+      //   },
+      //   {
+      //     id: guildId,
+      //     allow: [PermissionsBitField.Flags.RequestToSpeak],
+      //   },
+      // ],
     });
 
-    return { newAdminChannel, lobbyChannel };
+    return {
+      tournamentAdminChannel,
+      tournamentLiveStage,
+      tournamentCategoryChannel,
+    };
   } catch (error) {
     console.log(error);
+    return null;
   }
 }

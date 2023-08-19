@@ -102,6 +102,10 @@ async function createCheckinChannel(interaction) {
         },
       ],
     });
+    await newCheckinChannel.permissionOverwrites.create(
+      channel.guild.roles.everyone,
+      { ViewChannel: true, SendMessages: false },
+    );
     return { newCheckinChannel };
   } catch (error) {
     console.log(error);
