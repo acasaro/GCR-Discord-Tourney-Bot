@@ -2,6 +2,7 @@ const {
   ChannelType,
   ThreadManager,
   ThreadAutoArchiveDuration,
+  PermissionsBitField,
 } = require('discord.js');
 const { teamSizes } = require('../../common/constants/tournaments');
 const {
@@ -9,6 +10,8 @@ const {
   getRegisteredUsers,
   createTournamentTeam,
   updateRegisteredUser,
+  getBotConfig,
+  updateTournament,
 } = require('../../common/utility-functions');
 const { TeamEmbedMessage } = require('../../embeds/teamEmbed');
 const { manageTeamsEmbed } = require('../../embeds/manageTeamsEmbed');
@@ -20,8 +23,13 @@ module.exports = {
   async execute(interaction) {
     try {
       const { client, channel } = interaction;
+      const guildId = interaction.guild.id;
+      const guild = await client.guilds.cache.get(guildId);
+
       const parentChannelId = channel.parentId;
       const tournament = await getTournamentByCategoryId(parentChannelId);
+
+      const { teams_created_message_id, lobby_channel_id } = tournament;
       const players = await getRegisteredUsers(tournament.id);
       const teamSize = teamSizes[tournament.game_mode];
       const teamCount = Math.floor(players.length / teamSize);
@@ -60,7 +68,7 @@ module.exports = {
 
         let teams = [];
 
-        console.log({ remainingPlayerCount, remainingPlayers, sortedMembers });
+        // console.log({ remainingPlayerCount, remainingPlayers, sortedMembers });
         if (teamSize === 1) {
           teams = players.map((player, index) => ({
             teamName: `Team #${index + 1}`,
@@ -101,21 +109,63 @@ module.exports = {
         }
 
         // Create Teams Thread to list all teams
-        const threadChannel = await channel.threads.create({
-          name: 'teams',
-          autoArchiveDuration: ThreadAutoArchiveDuration.ONE_DAY,
-          reason: 'Creating thread to manage teams.',
-          type: ChannelType.PrivateThread,
+        const teamChannel = await guild.channels.create({
+          name: '👥 Teams',
+          type: ChannelType.GuildText,
+          parent: channel.parentId,
+          permissionOverwrites: [
+            {
+              id: guildId,
+              deny: [PermissionsBitField.Flags.SendMessages],
+            },
+            {
+              id: guildId,
+              allow: [PermissionsBitField.Flags.ViewChannel],
+            },
+          ],
         });
 
-        await threadChannel.send(
-          await manageTeamsEmbed({ tournament, teamCount, remainingMessage }),
+        await teamChannel.permissionOverwrites.create(
+          channel.guild.roles.everyone,
+          { ViewChannel: true, SendMessages: false },
         );
+        // Update Tournament with teams_channel_id
+        await updateTournament(tournament.id, {
+          teams_channel_id: teamChannel.id,
+        });
+
+        await interaction.channel.send(
+          await manageTeamsEmbed({
+            tournament,
+            teamCount,
+            remainingMessage,
+          }),
+        );
+
         interaction.editReply(
-          `Teams created and added to a new thread: ${threadChannel}`,
+          `Teams created and listed in a new channel: ${teamChannel}`,
         );
+
+        // Fetch tournament stage channel
+        const tournamentStageChannel =
+          interaction.client.channels.cache.get(lobby_channel_id);
+
+        // Send checkin message to chat inside tournament lobby.
+        const teamsCreatedMessage = await tournamentStageChannel.send(
+          `Teams are created! You can view them here: ${teamChannel}`,
+        );
+
+        // If checkin_message_id doesn't exisit add it
+        if (
+          tournament.teamsCreatedMessage !== teamsCreatedMessage.id.toString()
+        ) {
+          await updateTournament(tournament.id, {
+            teams_created_message_id: teamsCreatedMessage.id.toString(),
+          });
+        }
+
         teams.forEach(async team => {
-          console.log(team);
+          // console.log(team);
           await createTournamentTeam({
             name: team.teamName,
             players: JSON.stringify(team.players),
@@ -130,7 +180,7 @@ module.exports = {
               status: 'matched',
             });
           });
-          await threadChannel.send(
+          await teamChannel.send(
             await TeamEmbedMessage({
               team,
               interaction,
