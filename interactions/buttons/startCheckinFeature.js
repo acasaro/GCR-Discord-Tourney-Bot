@@ -91,6 +91,7 @@ async function createCheckinChannel(interaction) {
       name: `✅ Check-in`,
       type: ChannelType.GuildText,
       parent: channel.parentId,
+      position: 12,
       permissionOverwrites: [
         {
           id: guildId,
