@@ -91,16 +91,16 @@ async function createCheckinChannel(interaction) {
       name: `checkin`,
       type: ChannelType.GuildText,
       parent: channel.parentId,
-      permissionOverwrites: [
-        {
-          id: guildId,
-          allow: [PermissionsBitField.Flags.ViewChannel],
-        },
-        {
-          id: guildId,
-          deny: [PermissionsBitField.Flags.SendMessages],
-        },
-      ],
+      // permissionOverwrites: [
+      //   {
+      //     id: guildId,
+      //     allow: [PermissionsBitField.Flags.ViewChannel],
+      //   },
+      //   {
+      //     id: guildId,
+      //     deny: [PermissionsBitField.Flags.SendMessages],
+      //   },
+      // ],
     });
     return { newCheckinChannel };
   } catch (error) {
